@@ -22,3 +22,12 @@ CREATE TABLE IF NOT EXISTS studio_leads (
 
 CREATE INDEX IF NOT EXISTS idx_studio_leads_created_at ON studio_leads(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_studio_leads_whatsapp ON studio_leads(whatsapp_number);
+
+-- [2026-09-22T22:15:00Z] Schema Mutation: DPDP Act 2023 Consent Audit Records
+-- Rationale: Digital Personal Data Protection Act, 2023 mandates maintaining clear,
+-- demonstrable evidence of affirmative consent given by the Data Principal before processing.
+ALTER TABLE studio_leads ADD COLUMN dpdp_consent_given BOOLEAN NOT NULL DEFAULT 1;
+ALTER TABLE studio_leads ADD COLUMN dpdp_consent_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE studio_leads ADD COLUMN dpdp_notice_version TEXT NOT NULL DEFAULT 'dpdp-2023-v2.1';
+
+CREATE INDEX IF NOT EXISTS idx_studio_leads_dpdp_consent ON studio_leads(dpdp_consent_given, dpdp_consent_timestamp);
