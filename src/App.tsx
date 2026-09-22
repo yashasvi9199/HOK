@@ -6,6 +6,8 @@ import { MobileShell } from './views/mobile/MobileShell';
 import { GalleryPage } from './views/pages/GalleryPage';
 import { FAQPage } from './views/pages/FAQPage';
 import { ContactPage } from './views/pages/ContactPage';
+import { TermsPage } from './views/pages/TermsPage';
+import { PrivacyPage } from './views/pages/PrivacyPage';
 import { DeviceSwitcherPill } from './components/DeviceSwitcherPill';
 
 // Helper component to ensure window scrolls to top upon page navigation
@@ -29,6 +31,8 @@ function AppContent() {
       <Route path="/gallery" element={<GalleryPage />} />
       <Route path="/faq" element={<FAQPage />} />
       <Route path="/contact" element={<ContactPage />} />
+      <Route path="/terms" element={<TermsPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
       {/* Catch-all to home */}
       <Route path="*" element={null} />
     </Routes>
