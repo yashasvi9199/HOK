@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { MessageCircle, CheckCircle2, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { MessageCircle, CheckCircle2, Sparkles, Shield, ChevronDown, ChevronUp } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import type { LeadFormData, LeadIntent, SkillLevel, HardwareStatus } from '../features/leads/leads.types';
 import { leadFormSchema } from '../features/leads/leads.schema';
@@ -26,9 +27,15 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({
     whatsappNumber: '',
     countryCode: '+91',
     notes: '',
+    consentAccepted: false,
   });
 
-  const [errors, setErrors] = useState<{ fullName?: string; whatsappNumber?: string }>({});
+  const [errors, setErrors] = useState<{
+    fullName?: string;
+    whatsappNumber?: string;
+    consentAccepted?: string;
+  }>({});
+  const [showNoticeSummary, setShowNoticeSummary] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const intentOptions: readonly LeadIntent[] = [
@@ -49,17 +56,23 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({
     'Other Tablet (Galaxy/Wacom)',
   ];
 
-  // ? Enforce zero-trust validation via Zod schema
+  // ? Enforce zero-trust validation via Zod schema including DPDP consent
   const validate = (): boolean => {
     try {
       const result = leadFormSchema.safeParse(formData);
       if (!result.success) {
-        const fieldErrors: { fullName?: string; whatsappNumber?: string } = {};
+        const fieldErrors: {
+          fullName?: string;
+          whatsappNumber?: string;
+          consentAccepted?: string;
+        } = {};
         for (const issue of result.error.issues) {
           if (issue.path[0] === 'fullName') {
             fieldErrors.fullName = issue.message;
           } else if (issue.path[0] === 'whatsappNumber') {
             fieldErrors.whatsappNumber = issue.message;
+          } else if (issue.path[0] === 'consentAccepted') {
+            fieldErrors.consentAccepted = issue.message;
           }
         }
         setErrors(fieldErrors);
@@ -273,6 +286,79 @@ export const LeadCaptureForm: React.FC<LeadCaptureFormProps> = ({
             />
           </div>
         )}
+
+        {/* Step 5: Statutory DPDP Act 2023 Consent Checkbox & Notice */}
+        <div className="pt-3 border-t border-[#F0ECE1] space-y-2.5">
+          <div className="flex items-start gap-3">
+            <input
+              id="dpdp-consent-checkbox"
+              type="checkbox"
+              checked={formData.consentAccepted}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                setFormData({
+                  ...formData,
+                  consentAccepted: checked,
+                  consentTimestamp: checked ? new Date().toISOString() : undefined,
+                });
+                if (checked) {
+                  setErrors((prev) => ({ ...prev, consentAccepted: undefined }));
+                }
+              }}
+              className="mt-0.5 w-4 h-4 rounded-xs border-[#C5A059] text-[#C5A059] focus:ring-[#C5A059] cursor-pointer shrink-0 accent-[#C5A059]"
+            />
+            <label
+              htmlFor="dpdp-consent-checkbox"
+              className="text-xs font-sans text-[#1C1917] leading-relaxed cursor-pointer select-none"
+            >
+              I consent to House of Kalakaar collecting and processing my name, phone number, and artistic preferences to contact me via WhatsApp or phone regarding masterclass admissions and atelier services, in accordance with the{' '}
+              <Link to="/privacy" className="text-[#C5A059] font-medium underline hover:text-[#1C1917] transition-colors">
+                Privacy Notice
+              </Link>{' '}
+              and{' '}
+              <Link to="/terms" className="text-[#C5A059] font-medium underline hover:text-[#1C1917] transition-colors">
+                Terms & Conditions
+              </Link>{' '}
+              pursuant to India's DPDP Act, 2023. I understand I may withdraw this consent at any time. *
+            </label>
+          </div>
+
+          {errors.consentAccepted && (
+            <div className="text-xs text-red-500 font-medium pl-7 animate-in fade-in">
+              {errors.consentAccepted}
+            </div>
+          )}
+
+          {/* Collapsible DPDP Statutory Notice Summary */}
+          <div className="pl-7">
+            <button
+              type="button"
+              onClick={() => setShowNoticeSummary(!showNoticeSummary)}
+              className="inline-flex items-center gap-1.5 text-[11px] font-sans text-[#78716C] hover:text-[#C5A059] transition-colors cursor-pointer"
+            >
+              <Shield className="w-3.5 h-3.5 text-[#C5A059]" />
+              <span>{showNoticeSummary ? 'Hide DPDP Notice Details' : 'View DPDP Section 5 Notice Summary'}</span>
+              {showNoticeSummary ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            </button>
+
+            {showNoticeSummary && (
+              <div className="mt-2 p-3 bg-[#FAF7F2] border border-[#F0ECE1] text-[11px] font-sans text-[#78716C] space-y-1.5 animate-in fade-in">
+                <p>
+                  <strong>Data Fiduciary:</strong> House of Kalakaar by Vrinda Haldia, Jaipur, Rajasthan, India.
+                </p>
+                <p>
+                  <strong>Specified Purpose:</strong> Evaluating student readiness, coordinating cohorts, and providing tailored consultation.
+                </p>
+                <p>
+                  <strong>Rights & Withdrawal:</strong> Exercise rights to access, correction, erasure, or withdraw consent at any time via <a href="mailto:privacy@houseofkalakaar.com" className="text-[#C5A059] underline">privacy@houseofkalakaar.com</a>.
+                </p>
+                <p>
+                  <strong>Appeals:</strong> Redressal through our Grievance Officer, with escalation rights to the Data Protection Board of India.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Submit Action */}
         <div className="pt-2">
