@@ -43,6 +43,8 @@ export function useWhatsAppRedirect() {
         `*Hardware:* ${formData.hardware}`,
         formData.notes ? `*Notes:* ${formData.notes}` : null,
         `━━━━━━━━━━━━━━━━━━━━━━`,
+        `*DPDP Act 2023 Consent:* Affirmatively confirmed to Terms & Privacy Notice`,
+        `━━━━━━━━━━━━━━━━━━━━━━`,
         `Looking forward to connecting with the atelier! ✨`,
       ]
         .filter(Boolean)
