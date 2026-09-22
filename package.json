@@ -12,7 +12,8 @@
     "clean": "rm -rf dist server.js .wrangler",
     "lint": "tsc --noEmit",
     "pages:dev": "wrangler pages dev ./dist --compatibility-date=2024-09-22",
-    "deploy": "pnpm build && wrangler pages deploy ./dist"
+    "deploy": "pnpm build && wrangler pages deploy ./dist",
+    "prepare": "husky"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
