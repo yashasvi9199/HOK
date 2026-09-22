@@ -11,4 +11,6 @@ export interface LeadFormData {
   readonly whatsappNumber: string;
   readonly countryCode: string;
   readonly notes?: string;
+  readonly consentAccepted: boolean;
+  readonly consentTimestamp?: string;
 }
