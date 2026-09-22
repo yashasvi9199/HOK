@@ -79,3 +79,27 @@ pnpm deploy
 - **Pre-commit Quality Checks**: Husky triggers `tsc --noEmit` and production build verification on each git commit.
 - **Zero-Trust Input**: Inbound user data verified against Zod schemas before external redirects.
 - **Better Comments**: Annotate code with standard tags (`// *`, `// !`, `// ?`, `// TODO:`).
+
+---
+
+## DPDP Act 2023 & Legal Compliance Architecture
+
+The application implements full compliance with India's **Digital Personal Data Protection Act, 2023 (DPDP Act)** and statutory rules:
+
+1. **Statutory Notice (`/privacy`)**:
+   - Explicit Section 5 Notice delivered before consent.
+   - Clarifies categories of digital personal data collected, specific processing purposes, retention criteria, and security safeguards.
+   - Details Data Principal statutory rights (Access, Correction, Erasure, Grievance Redressal, Nomination, and Consent Withdrawal).
+   - Identifies Grievance Redressal Officer (`privacy@houseofkalakaar.com`) with a 30-day SLA and appellate recourse to the **Data Protection Board of India (DPBI)**.
+
+2. **Binding Terms & Conditions (`/terms`)**:
+   - Atelier mentorship cohort capacity agreements, non-refundable reservation policies, and copyright protection under the Indian Copyright Act, 1957.
+   - Exclusive jurisdiction located in civil courts at Jaipur, Rajasthan, India.
+
+3. **Affirmative Consent Architecture**:
+   - Mandatory unticked consent checkbox on `LeadCaptureForm.tsx`.
+   - Zod schema validation blocking any form submission without active consent.
+   - Audit metadata (`dpdp_consent_given`, `dpdp_consent_timestamp`, `dpdp_notice_version`) recorded in SQLite / D1 schema.
+
+4. **Cookie & Privacy Preferences Banner**:
+   - Aesthetic floating banner saving user choice in `localStorage` under `hok_cookie_consent`.
