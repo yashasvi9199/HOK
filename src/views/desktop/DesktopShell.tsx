@@ -9,6 +9,7 @@ import { TestimonialCards } from '../../components/TestimonialCards';
 import { LeadCaptureForm } from '../../components/LeadCaptureForm';
 import { ArtworkModal } from '../../components/ArtworkModal';
 import { SectionWrapper } from '../../components/SectionWrapper';
+import { CookieBanner } from '../../components/CookieBanner';
 import { useWhatsAppRedirect, STUDIO_INSTAGRAM_URL, STUDIO_YOUTUBE_URL } from '../../hooks/useWhatsAppRedirect';
 import { Artwork } from '../../types';
 
@@ -445,6 +446,12 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ children }) => {
                 <li>
                   <Link to="/contact" className="hover:text-white transition-colors">Studio Coordinates</Link>
                 </li>
+                <li>
+                  <Link to="/terms" className="hover:text-[#C5A059] transition-colors">Terms & Conditions</Link>
+                </li>
+                <li>
+                  <Link to="/privacy" className="hover:text-[#C5A059] transition-colors">DPDP Privacy Notice</Link>
+                </li>
               </ul>
             </div>
 
@@ -475,8 +482,8 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ children }) => {
                 Atelier Location
               </h4>
               <p className="text-xs font-sans text-stone-400 leading-relaxed">
-                Jaipur / New Delhi<br />
-                Rajasthan, India<br />
+                Civil Lines, C-Scheme<br />
+                Jaipur, Rajasthan 302006, India<br />
                 curator@houseofkalakaar.com
               </p>
               <AtelierButton
@@ -495,14 +502,21 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ children }) => {
             <div>
               © {new Date().getFullYear()} House of Kalakaar by Vrinda Haldia. All rights reserved.
             </div>
-            <div className="flex items-center gap-6">
-              <span>Procreate is a registered trademark of Savage Interactive Pty Ltd.</span>
+            <div className="flex items-center gap-4">
+              <Link to="/terms" className="hover:text-stone-300 transition-colors">Terms</Link>
+              <span className="text-stone-700">•</span>
+              <Link to="/privacy" className="hover:text-stone-300 transition-colors">Privacy (DPDP)</Link>
+              <span className="text-stone-700">•</span>
+              <span>Procreate® Savage Interactive Pty Ltd</span>
               <span className="text-stone-700">•</span>
               <span className="text-stone-400">Tactile Modernism Atelier</span>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Global DPDP Cookie & Privacy Consent Banner */}
+      <CookieBanner />
     </div>
   );
 };
