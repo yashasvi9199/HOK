@@ -5,7 +5,7 @@
 -- table definitions with strict ISO timestamps and mutation rationales.
 -- ==============================================================================
 
--- [2024-09-22T17:30:00Z] Initial Schema Setup: Atelier Leads Table
+-- [2026-09-22T17:30:00Z] Initial Schema Setup: Atelier Leads Table
 -- Rationale: Store incoming student applications and artwork commissions.
 CREATE TABLE IF NOT EXISTS studio_leads (
     id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),

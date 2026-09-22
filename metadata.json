@@ -1,0 +1,6 @@
+{
+  "name": "House of Kalakaar by Vrinda Haldia",
+  "description": "High-end digital art studio, fashion illustration brand, and Procreate mentoring academy by Vrinda Haldia.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
