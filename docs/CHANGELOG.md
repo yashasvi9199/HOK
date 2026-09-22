@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-09-22
+
+### Added
+- Comprehensive DPDP Act 2023 Statutory Privacy Notice page (`/privacy`, `src/views/pages/PrivacyPage.tsx`).
+- Tailored Atelier Terms & Conditions of Service page (`/terms`, `src/views/pages/TermsPage.tsx`).
+- Mandatory affirmative consent checkbox with pre-consent statutory notice summary on `LeadCaptureForm.tsx`.
+- Strict Zod validation enforcing active DPDP consent prior to inquiry processing (`src/features/leads/leads.schema.ts`).
+- Floating aesthetic `CookieBanner.tsx` saving non-sensitive visitor preference to `localStorage`.
+- Feature-scoped legal module type definitions (`src/features/legal/legal.types.ts`).
+- Append-only schema mutation in `docs/DATABASE.sql` logging `dpdp_consent_given`, `dpdp_consent_timestamp`, and `dpdp_notice_version`.
+- Desktop and mobile footer integration featuring verified physical studio coordinates and legal links.
+
 ## [1.0.0] - 2024-09-22
 
 ### Added
