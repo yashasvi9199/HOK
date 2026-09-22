@@ -9,6 +9,7 @@ import { TestimonialCards } from '../../components/TestimonialCards';
 import { LeadCaptureForm } from '../../components/LeadCaptureForm';
 import { ArtworkModal } from '../../components/ArtworkModal';
 import { SectionWrapper } from '../../components/SectionWrapper';
+import { CookieBanner } from '../../components/CookieBanner';
 import { useWhatsAppRedirect, STUDIO_INSTAGRAM_URL, STUDIO_YOUTUBE_URL } from '../../hooks/useWhatsAppRedirect';
 import { Artwork } from '../../types';
 
@@ -30,6 +31,8 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
     { name: 'Artwork Gallery', path: '/gallery' },
     { name: 'Guidance & FAQ', path: '/faq' },
     { name: 'Contact & Studio', path: '/contact' },
+    { name: 'Terms & Conditions', path: '/terms' },
+    { name: 'DPDP Privacy Notice', path: '/privacy' },
   ];
 
   const handleNavClick = (path: string) => {
@@ -386,11 +389,30 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
             </button>
           </div>
 
+          <div className="text-xs font-sans text-stone-400 space-y-1">
+            <p className="font-semibold text-stone-300">The Jaipur Atelier</p>
+            <p>Civil Lines, C-Scheme, Jaipur, Rajasthan 302006, India</p>
+            <p>curator@houseofkalakaar.com</p>
+          </div>
+
+          <div className="flex items-center justify-center gap-4 text-xs font-sans text-stone-400">
+            <Link to="/terms" className="hover:text-[#C5A059] underline">
+              Terms & Conditions
+            </Link>
+            <span>•</span>
+            <Link to="/privacy" className="hover:text-[#C5A059] underline">
+              DPDP Privacy Notice
+            </Link>
+          </div>
+
           <div className="text-[11px] font-sans text-stone-500 pt-4 border-t border-stone-800">
-            © {new Date().getFullYear()} House of Kalakaar by Vrinda Haldia.
+            © {new Date().getFullYear()} House of Kalakaar by Vrinda Haldia. All rights reserved.
           </div>
         </div>
       </footer>
+
+      {/* Global DPDP Cookie & Privacy Consent Banner */}
+      <CookieBanner />
 
       {/* Thumb-Friendly Sticky Mobile Action Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-t border-[#C5A059]/40 p-2.5 flex items-center gap-2 shadow-2xl">
