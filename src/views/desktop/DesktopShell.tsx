@@ -25,6 +25,11 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ children }) => {
 
   const isHome = location.pathname === '/';
 
+  const [isNavVisible, setIsNavVisible] = useState(!isHome);
+  const [isVideoEnded, setIsVideoEnded] = useState(!isHome);
+  const [isScrolled, setIsScrolled] = useState(!isHome);
+  const videoRef = React.useRef<HTMLVideoElement | null>(null);
+
   const navLinks = [
     { name: 'The Atelier', path: '/' },
     { name: 'Gallery', path: '/gallery' },
@@ -32,207 +37,299 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ children }) => {
     { name: 'Contact & Studio', path: '/contact' },
   ];
 
+  // Lock scroll while video is playing as loading screen on desktop home
+  React.useEffect(() => {
+    if (!isHome || isVideoEnded) {
+      document.body.style.overflow = '';
+      return;
+    }
+
+    document.body.style.overflow = 'hidden';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
+    const preventScroll = (e: Event) => {
+      e.preventDefault();
+    };
+
+    const preventKeyScroll = (e: KeyboardEvent) => {
+      if (['ArrowDown', 'ArrowUp', 'Space', 'PageDown', 'PageUp', 'Home', 'End'].includes(e.code)) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('wheel', preventScroll, { passive: false });
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+    window.addEventListener('keydown', preventKeyScroll);
+
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('wheel', preventScroll);
+      window.removeEventListener('touchmove', preventScroll);
+      window.removeEventListener('keydown', preventKeyScroll);
+    };
+  }, [isHome, isVideoEnded]);
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      const time = videoRef.current.currentTime;
+      if (time >= 7 && !isNavVisible) {
+        setIsNavVisible(true);
+      }
+      if (time >= 7.95 && !isVideoEnded) {
+        setIsVideoEnded(true);
+        videoRef.current.pause();
+      }
+    }
+  };
+
+  const handleVideoEnded = () => {
+    setIsNavVisible(true);
+    setIsVideoEnded(true);
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+  };
+
+  // Safety fallback after 8.2s if video autoplay fails or is delayed
+  React.useEffect(() => {
+    if (!isHome) {
+      setIsNavVisible(true);
+      setIsVideoEnded(true);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setIsNavVisible(true);
+      setIsVideoEnded(true);
+    }, 8200);
+
+    return () => clearTimeout(timer);
+  }, [isHome]);
+
+  // Monitor scroll to reveal top bar header when scrolled past hero
+  React.useEffect(() => {
+    if (!isHome) {
+      setIsScrolled(true);
+      return;
+    }
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 80);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isHome]);
+
+  const scrollToAdmissions = () => {
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        const el = document.getElementById('admissions') || document.getElementById('lead-capture-form');
+        el?.scrollIntoView({ behavior: 'smooth' });
+      }, 200);
+    } else {
+      const el = document.getElementById('admissions') || document.getElementById('lead-capture-form');
+      el?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-[#1C1917] flex flex-col selection:bg-[#C5A059]/20 selection:text-[#1C1917]">
       <ArtworkModal artwork={selectedArtwork} onClose={() => setSelectedArtwork(null)} />
 
-      {/* Top Notification Ribbon */}
-      <div className="bg-[#1C1917] text-[#FAF7F2] py-2 px-6 text-center text-xs font-sans tracking-widest uppercase border-b border-[#C5A059]/30 flex items-center justify-center gap-3">
-        <span className="text-[#C5A059]">✦</span>
-        <span>Admissions Open for Signature Procreate Couture Cohort 17 • Limited to 20 Atelier Seats</span>
-        <span className="text-[#C5A059]">✦</span>
-      </div>
-
-      {/* Minimalist Editorial Desktop Header */}
-      <header className="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#F0ECE1] transition-all">
-        <div className="max-w-7xl mx-auto px-8 md:px-12 h-24 flex items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="group cursor-pointer">
-            <Logo variant="full" />
-          </Link>
-
-          {/* Desktop Navigation Links */}
-          <nav className="flex items-center gap-10">
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.path;
-              return (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  className={`text-sm font-sans tracking-wide transition-colors relative py-1.5 cursor-pointer ${
-                    isActive
-                      ? 'text-[#1C1917] font-semibold'
-                      : 'text-[#78716C] hover:text-[#1C1917]'
-                  }`}
-                >
-                  {link.name}
-                  {/* Subtle Underline */}
-                  <span
-                    className={`absolute bottom-0 left-0 h-[1.5px] bg-[#C5A059] transition-all duration-300 ${
-                      isActive ? 'w-full' : 'w-0 hover:w-full'
-                    }`}
-                  />
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Direct WhatsApp CTA Button */}
-          <div className="flex items-center gap-4">
-            <AtelierButton
-              variant="outline"
-              size="sm"
-              icon={<MessageCircle className="w-4 h-4 text-[#128C7E]" />}
-              onClick={() => openDirectWhatsApp()}
-              className="border-[#1C1917]/20 hover:border-[#1C1917]"
-            >
-              Direct WhatsApp
-            </AtelierButton>
-
-            <AtelierButton
-              variant="primary"
-              size="sm"
-              onClick={() => {
-                if (location.pathname !== '/') {
-                  navigate('/');
-                  setTimeout(() => {
-                    document.getElementById('lead-capture-form')?.scrollIntoView({ behavior: 'smooth' });
-                  }, 200);
-                } else {
-                  document.getElementById('lead-capture-form')?.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-            >
-              Enroll Now
-            </AtelierButton>
-          </div>
+      {/* Top Header & Ribbon - Shown when scrolled down on Home, or always on other pages */}
+      <div
+        className={`transition-all duration-500 ease-in-out ${
+          isHome
+            ? `fixed top-0 left-0 right-0 z-50 ${
+                isScrolled
+                  ? 'translate-y-0 opacity-100 pointer-events-auto'
+                  : '-translate-y-full opacity-0 pointer-events-none'
+              }`
+            : 'sticky top-0 z-40'
+        }`}
+      >
+        {/* Top Notification Ribbon */}
+        <div className="bg-[#1C1917] text-[#FAF7F2] py-2 px-6 text-center text-xs font-sans tracking-widest uppercase border-b border-[#C5A059]/30 flex items-center justify-center gap-3">
+          <span className="text-[#C5A059]">✦</span>
+          <span>Admissions Open for Signature Procreate Couture Cohort 17 • Limited to 20 Atelier Seats</span>
+          <span className="text-[#C5A059]">✦</span>
         </div>
-      </header>
+
+        {/* Minimalist Editorial Desktop Header */}
+        <header className="bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#F0ECE1] shadow-xs transition-all">
+          <div className="max-w-7xl mx-auto px-8 md:px-12 h-24 flex items-center justify-between">
+            {/* Logo */}
+            <Link to="/" className="group cursor-pointer">
+              <Logo variant="full" />
+            </Link>
+
+            {/* Desktop Navigation Links */}
+            <nav className="flex items-center gap-10">
+              {navLinks.map((link) => {
+                const isActive = location.pathname === link.path;
+                return (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    className={`text-sm font-sans tracking-wide transition-colors relative py-1.5 cursor-pointer ${
+                      isActive
+                        ? 'text-[#1C1917] font-semibold'
+                        : 'text-[#78716C] hover:text-[#1C1917]'
+                    }`}
+                  >
+                    {link.name}
+                    {/* Subtle Underline */}
+                    <span
+                      className={`absolute bottom-0 left-0 h-[1.5px] bg-[#C5A059] transition-all duration-300 ${
+                        isActive ? 'w-full' : 'w-0 hover:w-full'
+                      }`}
+                    />
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Direct WhatsApp CTA Button */}
+            <div className="flex items-center gap-4">
+              <AtelierButton
+                variant="outline"
+                size="sm"
+                icon={<MessageCircle className="w-4 h-4 text-[#128C7E]" />}
+                onClick={() => openDirectWhatsApp()}
+                className="border-[#1C1917]/20 hover:border-[#1C1917]"
+              >
+                Direct WhatsApp
+              </AtelierButton>
+
+              <AtelierButton
+                variant="primary"
+                size="sm"
+                onClick={scrollToAdmissions}
+              >
+                Enroll Now
+              </AtelierButton>
+            </div>
+          </div>
+        </header>
+      </div>
 
       {/* Main Presentation Area */}
       <main className="flex-1">
         {isHome ? (
           <div>
-            {/* 1. HERO BANNER SECTION (Desktop Expanded Editorial Layout) */}
-            <section className="relative overflow-hidden pt-12 pb-24 border-b border-[#F0ECE1]">
-              <div className="max-w-7xl mx-auto px-8 md:px-12">
-                <div className="grid grid-cols-12 gap-12 items-center">
-                  {/* Left Column: Editorial Headline & Manifesto (7 cols) */}
-                  <div className="col-span-7 space-y-8 pr-4">
-                    <div className="inline-flex items-center gap-2.5 bg-[#FFFFFF] border border-[#C5A059]/40 px-3.5 py-1.5 shadow-xs">
-                      <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
-                      <span className="text-[11px] font-sans tracking-[0.25em] uppercase font-semibold text-[#1C1917]">
-                        Digital Atelier & Academy
+            {/* 1. IMMERSIVE HERO VIDEO LOADING & NAVIGATION SECTION (Desktop View Only) */}
+            <section className="relative w-full h-screen overflow-hidden bg-[#1C1917] flex items-center justify-center select-none">
+              <video
+                ref={videoRef}
+                src="/hero-noLogo.mp4"
+                autoPlay
+                muted
+                playsInline
+                preload="auto"
+                onTimeUpdate={handleTimeUpdate}
+                onEnded={handleVideoEnded}
+                className="w-full h-full object-cover object-center pointer-events-none"
+              />
+
+              {/* Contrast Vignette Gradient on Left to Guarantee Nav Readability */}
+              <div
+                className={`absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent transition-opacity duration-1000 pointer-events-none ${
+                  isNavVisible ? 'opacity-100' : 'opacity-0'
+                }`}
+              />
+
+              {/* Left-Aligned Vertical Navigation Overlay with Top-Left Logo */}
+              <div
+                className={`absolute inset-0 z-20 flex flex-col justify-between p-10 lg:p-14 pointer-events-none transition-all duration-1000 ease-out ${
+                  isNavVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6'
+                }`}
+              >
+                {/* Top-Left Logo with /Logo.png */}
+                <div className="pointer-events-auto">
+                  <Link to="/" className="group cursor-pointer inline-flex items-center gap-3.5">
+                    <img
+                      src="/Logo.png"
+                      alt="House of Kalakaar"
+                      className="w-12 h-12 lg:w-14 lg:h-14 object-contain drop-shadow-md group-hover:scale-105 transition-transform"
+                    />
+                    <div className="flex flex-col text-left">
+                      <span className="font-serif text-xl lg:text-2xl font-semibold tracking-tight text-white leading-tight drop-shadow-md">
+                        House of Kalakaar
+                      </span>
+                      <span className="text-[10px] lg:text-[11px] font-sans tracking-[0.22em] uppercase font-medium text-[#C5A059] drop-shadow-md">
+                        by Vrinda Haldia
                       </span>
                     </div>
+                  </Link>
+                </div>
 
-                    <h1 className="font-serif text-5xl lg:text-6xl xl:text-7xl font-light text-[#1C1917] leading-[1.08] tracking-tight">
-                      The Digital Atelier:{' '}
-                      <span className="italic font-normal text-[#C5A059] block mt-1">
-                        Where Fashion Meets Procreate.
-                      </span>
-                    </h1>
+                {/* Left-Aligned Vertical Navigation Menu */}
+                <div className="pointer-events-auto flex flex-col gap-6 my-auto max-w-sm">
+                  <nav className="flex flex-col gap-5">
+                    {navLinks.map((link) => {
+                      const isActive = location.pathname === link.path;
+                      return (
+                        <Link
+                          key={link.name}
+                          to={link.path}
+                          className={`group flex items-center gap-3.5 text-lg lg:text-xl font-serif tracking-wider transition-all duration-300 cursor-pointer ${
+                            isActive
+                              ? 'text-[#C5A059] font-medium translate-x-2'
+                              : 'text-stone-200 hover:text-[#C5A059] hover:translate-x-2'
+                          }`}
+                        >
+                          <span
+                            className={`h-[1.5px] bg-[#C5A059] transition-all duration-300 ${
+                              isActive ? 'w-6' : 'w-0 group-hover:w-4'
+                            }`}
+                          />
+                          <span className="drop-shadow-lg">{link.name}</span>
+                        </Link>
+                      );
+                    })}
+                  </nav>
 
-                    <p className="font-sans text-lg text-[#78716C] leading-relaxed max-w-xl">
-                      Master the art of luxury fashion illustration, bridal lehenga rendering, and digital couture on iPad Pro. We merge timeless handloom traditions with contemporary Apple Pencil craft — preserving the authentic, tactile soul of traditional art.
-                    </p>
+                  {/* Overlaid Quick Action Buttons */}
+                  <div className="flex items-center gap-4 pt-2">
+                    <AtelierButton
+                      variant="primary"
+                      size="sm"
+                      onClick={scrollToAdmissions}
+                      className="shadow-xl"
+                    >
+                      Enroll Now
+                    </AtelierButton>
 
-                    {/* CTAs */}
-                    <div className="flex items-center gap-4 pt-2">
-                      <AtelierButton
-                        variant="primary"
-                        size="lg"
-                        icon={<ArrowRight className="w-4 h-4 text-[#C5A059]" />}
-                        onClick={() => {
-                          document.getElementById('lead-capture-form')?.scrollIntoView({ behavior: 'smooth' });
-                        }}
-                      >
-                        Explore Masterclasses
-                      </AtelierButton>
-
-                      <Link to="/gallery">
-                        <AtelierButton variant="outline" size="lg">
-                          View Atelier Gallery
-                        </AtelierButton>
-                      </Link>
-
-                      <button
-                        onClick={() => openDirectWhatsApp('Hello Vrinda, I would love to learn more about the Procreate masterclass curriculum.')}
-                        className="p-3.5 border border-[#1C1917]/20 hover:border-[#128C7E] hover:bg-white text-[#128C7E] transition-all cursor-pointer shadow-xs"
-                        title="Quick WhatsApp Chat"
-                      >
-                        <MessageCircle className="w-5 h-5" />
-                      </button>
-                    </div>
-
-                    {/* Editorial Stats Strip */}
-                    <div className="grid grid-cols-3 gap-6 pt-6 border-t border-[#F0ECE1] max-w-lg">
-                      <div>
-                        <div className="font-serif text-3xl font-semibold text-[#1C1917]">2,500+</div>
-                        <div className="text-xs font-sans text-[#78716C] uppercase tracking-wider mt-1">
-                          Artists Mentored
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-serif text-3xl font-semibold text-[#1C1917]">35+</div>
-                        <div className="text-xs font-sans text-[#78716C] uppercase tracking-wider mt-1">
-                          Custom Brushes
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-serif text-3xl font-semibold text-[#1C1917]">18</div>
-                        <div className="text-xs font-sans text-[#78716C] uppercase tracking-wider mt-1">
-                          Countries Reached
-                        </div>
-                      </div>
-                    </div>
+                    <AtelierButton
+                      variant="outline"
+                      size="sm"
+                      icon={<MessageCircle className="w-4 h-4 text-[#128C7E]" />}
+                      onClick={() => openDirectWhatsApp()}
+                      className="bg-black/40 text-white border-white/30 hover:bg-white/20 hover:text-white shadow-xl"
+                    >
+                      Direct WhatsApp
+                    </AtelierButton>
                   </div>
+                </div>
 
-                  {/* Right Column: High-Impact Visual Frame (5 cols) */}
-                  <div className="col-span-5 relative">
-                    {/* Shadowed Canvas Container */}
-                    <div className="relative bg-[#FFFFFF] p-4 shadow-2xl border border-[#C5A059]/40 group">
-                      <div className="relative aspect-[3/4] overflow-hidden bg-stone-900">
-                        <img
-                          src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80"
-                          alt="Fashion Illustration Artwork on Procreate"
-                          className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-700"
-                        />
-
-                        {/* Overlaid Palette Swatches */}
-                        <div className="absolute top-4 right-4 bg-[#1C1917]/85 backdrop-blur-md p-2.5 border border-white/10 flex flex-col gap-1.5 shadow-lg">
-                          <span className="text-[9px] uppercase tracking-widest text-stone-300 font-sans text-center mb-1">
-                            Palette
-                          </span>
-                          <div className="w-5 h-5 bg-[#C5A059] border border-white/20" title="Antique Studio Gold" />
-                          <div className="w-5 h-5 bg-[#FAF7F2] border border-white/20" title="Natural Linen" />
-                          <div className="w-5 h-5 bg-[#1C1917] border border-white/20" title="Deep Charcoal" />
-                          <div className="w-5 h-5 bg-[#8E2824] border border-white/20" title="Crimson Silk" />
-                        </div>
-
-                        {/* Floating iPad Canvas Specs Tag */}
-                        <div className="absolute bottom-4 left-4 right-4 bg-[#FAF7F2]/95 backdrop-blur-md p-3 border border-[#C5A059]/40 text-[#1C1917] flex items-center justify-between shadow-md">
-                          <div className="flex items-center gap-2">
-                            <Brush className="w-4 h-4 text-[#C5A059]" />
-                            <span className="text-xs font-sans font-medium">
-                              Apple Pencil Procreate Canvas • 68 Layers
-                            </span>
-                          </div>
-                          <span className="text-[10px] font-mono text-[#78716C]">
-                            300 DPI Ultra HD
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Floating Decorative Seal */}
-                    <div className="absolute -bottom-6 -left-6 bg-[#1C1917] text-[#FAF7F2] w-28 h-28 rounded-full border-2 border-[#C5A059] flex flex-col items-center justify-center p-2 text-center shadow-xl">
-                      <span className="font-serif text-lg text-[#C5A059] font-bold">100%</span>
-                      <span className="text-[9px] font-sans tracking-wider uppercase text-stone-300 leading-tight">
-                        Tactile Texture Authentic
-                      </span>
-                    </div>
-                  </div>
+                {/* Bottom Scroll Cue (Visible once video ends and scroll is unlocked) */}
+                <div
+                  className={`transition-all duration-700 ${
+                    isVideoEnded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                  }`}
+                >
+                  <button
+                    onClick={() => {
+                      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                    }}
+                    className="pointer-events-auto inline-flex items-center gap-2.5 text-xs font-sans uppercase tracking-[0.25em] text-stone-300 hover:text-white transition-colors cursor-pointer group"
+                  >
+                    <span>Scroll to Explore</span>
+                    <ArrowRight className="w-3.5 h-3.5 rotate-90 text-[#C5A059] group-hover:translate-y-1 transition-transform" />
+                  </button>
                 </div>
               </div>
             </section>
