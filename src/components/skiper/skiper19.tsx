@@ -12,11 +12,15 @@ const SVG_PATH_DATA =
 export const LinePath: React.FC<Skiper19Props> = ({
   className = '',
   scrollYProgress: externalProgress,
-  strokeColor = '#C2F84F',
-  strokeWidth = 20,
-  pathLengthRange = [0.5, 1],
+  containerRef,
+  strokeColor = '#C5A059',
+  strokeWidth = 16,
+  pathLengthRange = [0, 1],
+  preserveAspectRatio = 'xMidYMid meet',
 }) => {
-  const { scrollYProgress: defaultProgress } = useScroll();
+  const { scrollYProgress: defaultProgress } = useScroll(
+    containerRef ? { target: containerRef, offset: ['start end', 'end start'] } : undefined
+  );
   const progress: MotionValue<number> = externalProgress ?? defaultProgress;
 
   const pathLength = useTransform(
@@ -29,9 +33,8 @@ export const LinePath: React.FC<Skiper19Props> = ({
 
   return (
     <svg
-      width="1278"
-      height="2319"
       viewBox={SVG_VIEWBOX}
+      preserveAspectRatio={preserveAspectRatio}
       fill="none"
       overflow="visible"
       xmlns="http://www.w3.org/2000/svg"
@@ -42,6 +45,8 @@ export const LinePath: React.FC<Skiper19Props> = ({
         d={SVG_PATH_DATA}
         stroke={strokeColor}
         strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
         style={{
           pathLength,
           strokeDashoffset,

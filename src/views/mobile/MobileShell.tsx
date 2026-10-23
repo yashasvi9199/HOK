@@ -10,6 +10,7 @@ import { LeadCaptureForm } from '../../components/LeadCaptureForm';
 import { ArtworkModal } from '../../components/ArtworkModal';
 import { SectionWrapper } from '../../components/SectionWrapper';
 import { CookieBanner } from '../../components/CookieBanner';
+import { Skiper19 } from '../../components/Skiper19';
 import { useWhatsAppRedirect, STUDIO_INSTAGRAM_URL, STUDIO_YOUTUBE_URL } from '../../hooks/useWhatsAppRedirect';
 import { Artwork } from '../../types';
 
@@ -29,6 +30,7 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
   const navLinks = [
     { name: 'The Atelier', path: '/' },
     { name: 'Artwork Gallery', path: '/gallery' },
+    { name: 'Scroll Effect (@skiper-ui)', path: '/scroll-effect' },
     { name: 'Guidance & FAQ', path: '/faq' },
     { name: 'Contact & Studio', path: '/contact' },
     { name: 'Terms & Conditions', path: '/terms' },
@@ -342,6 +344,38 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
 
               <TestimonialCards />
             </SectionWrapper>
+
+            {/* INTERACTIVE @skiper-ui/skiper19 SCROLL ANIMATION SHOWCASE */}
+            <section className="relative py-16 bg-[#1C1917] text-[#FAF7F2] overflow-hidden border-y border-[#C5A059]/30 px-5 text-center">
+              <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden opacity-60">
+                <Skiper19
+                  className="w-full h-full max-h-[150%]"
+                  strokeColor="#C5A059"
+                  strokeWidth={14}
+                  pathLengthRange={[0, 1]}
+                />
+              </div>
+
+              <div className="relative z-10 space-y-3">
+                <div className="inline-flex items-center gap-1.5 bg-stone-900 border border-[#C5A059]/50 px-3 py-1 rounded-full text-[10px] uppercase tracking-widest text-[#C5A059] font-medium">
+                  <Sparkles className="w-3 h-3 text-[#C2F84F]" />
+                  <span>@skiper-ui/skiper19</span>
+                </div>
+                <h2 className="font-serif text-2xl text-white font-normal">
+                  The Living Stroke
+                </h2>
+                <p className="text-xs text-stone-300 max-w-xs mx-auto leading-relaxed">
+                  Scroll down to watch the gold atelier vector stroke dynamically draw itself in real-time.
+                </p>
+                <div className="pt-2">
+                  <Link to="/scroll-effect">
+                    <AtelierButton variant="primary" size="sm" className="w-full">
+                      Open 350vh Interactive Demo →
+                    </AtelierButton>
+                  </Link>
+                </div>
+              </div>
+            </section>
 
             {/* 6. INTERACTIVE CREATIVE LEAD CAPTURE FORM */}
             <SectionWrapper bg="linen" className="py-12" id="admissions">

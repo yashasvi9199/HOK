@@ -10,6 +10,7 @@ import { LeadCaptureForm } from '../../components/LeadCaptureForm';
 import { ArtworkModal } from '../../components/ArtworkModal';
 import { SectionWrapper } from '../../components/SectionWrapper';
 import { CookieBanner } from '../../components/CookieBanner';
+import { Skiper19 } from '../../components/Skiper19';
 import { useWhatsAppRedirect, STUDIO_INSTAGRAM_URL, STUDIO_YOUTUBE_URL } from '../../hooks/useWhatsAppRedirect';
 import { Artwork } from '../../types';
 
@@ -33,6 +34,7 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ children }) => {
   const navLinks = [
     { name: 'The Atelier', path: '/' },
     { name: 'Gallery', path: '/gallery' },
+    { name: 'Scroll Effect', path: '/scroll-effect' },
     { name: 'Guidance & FAQ', path: '/faq' },
     { name: 'Contact & Studio', path: '/contact' },
   ];
@@ -152,9 +154,17 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ children }) => {
         }`}
       >
         {/* Top Notification Ribbon */}
-        <div className="bg-[#1C1917] text-[#FAF7F2] py-2 px-6 text-center text-xs font-sans tracking-widest uppercase border-b border-[#C5A059]/30 flex items-center justify-center gap-3">
+        <div className="bg-[#1C1917] text-[#FAF7F2] py-2 px-6 text-center text-xs font-sans tracking-widest uppercase border-b border-[#C5A059]/30 flex flex-wrap items-center justify-center gap-3">
           <span className="text-[#C5A059]">✦</span>
-          <span>Admissions Open for Signature Procreate Couture Cohort 17 • Limited to 20 Atelier Seats</span>
+          <span>Admissions Open for Signature Procreate Couture Cohort 17</span>
+          <span className="text-[#C5A059]">•</span>
+          <Link
+            to="/scroll-effect"
+            className="inline-flex items-center gap-1.5 bg-[#C5A059]/20 hover:bg-[#C5A059]/35 border border-[#C5A059]/60 text-[#FAF7F2] px-2.5 py-0.5 rounded text-[11px] font-sans font-medium transition-colors"
+          >
+            <Sparkles className="w-3 h-3 text-[#C2F84F]" />
+            <span>Interactive Scroll Effect (@skiper-ui/skiper19)</span>
+          </Link>
           <span className="text-[#C5A059]">✦</span>
         </div>
 
@@ -473,6 +483,53 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ children }) => {
 
               <TestimonialCards />
             </SectionWrapper>
+
+            {/* INTERACTIVE @skiper-ui/skiper19 SCROLL ANIMATION SHOWCASE */}
+            <section className="relative py-28 bg-[#1C1917] text-[#FAF7F2] overflow-hidden border-y-2 border-[#C5A059]/30">
+              {/* Dynamic SVG Follow Scroll stroke drawing with scroll */}
+              <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden opacity-75">
+                <Skiper19
+                  className="w-full h-full max-w-6xl max-h-[140%] translate-y-12"
+                  strokeColor="#C5A059"
+                  strokeWidth={16}
+                  pathLengthRange={[0, 1]}
+                />
+              </div>
+
+              <div className="relative z-10 max-w-5xl mx-auto px-8 text-center">
+                <div className="inline-flex items-center gap-2 mb-4 bg-stone-900 border border-[#C5A059]/50 px-4 py-1.5 rounded-full">
+                  <Sparkles className="w-3.5 h-3.5 text-[#C2F84F]" />
+                  <span className="text-xs uppercase tracking-[0.25em] font-semibold text-[#C5A059]">
+                    @skiper-ui/skiper19 Component Demo
+                  </span>
+                </div>
+
+                <h2 className="font-serif text-3xl sm:text-5xl text-white font-normal tracking-tight mb-4">
+                  The Living Stroke: Dynamic Scroll-Driven SVG
+                </h2>
+
+                <p className="text-base sm:text-lg text-stone-300 font-sans leading-relaxed max-w-2xl mx-auto mb-8">
+                  As you scroll, this gold atelier stroke dynamically draws along an intricate curved path using Framer Motion's <span className="text-[#C2F84F] font-mono">useScroll</span> and <span className="text-[#C2F84F] font-mono">useTransform</span>.
+                </p>
+
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                  <Link to="/scroll-effect">
+                    <AtelierButton variant="primary" size="md">
+                      Open Fullscreen 350vh Experience →
+                    </AtelierButton>
+                  </Link>
+
+                  <AtelierButton
+                    variant="outline"
+                    size="md"
+                    onClick={scrollToAdmissions}
+                    className="border-white/30 text-white hover:bg-white/10"
+                  >
+                    Apply for Cohort 17
+                  </AtelierButton>
+                </div>
+              </div>
+            </section>
 
             {/* 6. INTERACTIVE CREATIVE LEAD CAPTURE FORM */}
             <SectionWrapper bg="linen" id="admissions">

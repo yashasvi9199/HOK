@@ -8,6 +8,7 @@ import { FAQPage } from './views/pages/FAQPage';
 import { ContactPage } from './views/pages/ContactPage';
 import { TermsPage } from './views/pages/TermsPage';
 import { PrivacyPage } from './views/pages/PrivacyPage';
+import { ScrollEffectPage } from './views/pages/ScrollEffectPage';
 import { DeviceSwitcherPill } from './components/DeviceSwitcherPill';
 
 // Helper component to ensure window scrolls to top upon page navigation
@@ -31,6 +32,7 @@ function AppContent() {
       <Route path="/gallery" element={<GalleryPage />} />
       <Route path="/faq" element={<FAQPage />} />
       <Route path="/contact" element={<ContactPage />} />
+      <Route path="/scroll-effect" element={<ScrollEffectPage />} />
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
       {/* Catch-all to home */}
