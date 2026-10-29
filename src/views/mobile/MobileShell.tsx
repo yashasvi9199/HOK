@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import {
-  Menu,
-  X,
   MessageCircle,
-  Sparkles,
   Instagram,
   Youtube,
-  ChevronRight,
 } from 'lucide-react';
 import { Logo } from '../../assets/Logo';
-import { AtelierButton } from '../../components/AtelierButton';
 import { HeroWalkGpuSection } from '../../components/HeroWalkGpuSection';
 import {
   ParallaxBookCardsSection,
@@ -26,6 +21,8 @@ import {
   STUDIO_INSTAGRAM_URL,
   STUDIO_YOUTUBE_URL,
 } from '../../hooks/useWhatsAppRedirect';
+import { TopNavbar } from '../../components/TopNavbar';
+import { BottomNavbar } from '../../components/BottomNavbar';
 
 interface MobileShellProps {
   children?: React.ReactNode;
@@ -33,11 +30,9 @@ interface MobileShellProps {
 
 export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
   const { openDirectWhatsApp } = useWhatsAppRedirect();
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeBookCard, setActiveBookCard] = useState<ActiveBookCardId>(null);
 
   const scrollToSection = (id: string) => {
-    setIsDrawerOpen(false);
     setActiveBookCard(null);
     const element = document.getElementById(id);
     if (element) {
@@ -54,85 +49,9 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#837d75] text-[#ece7d5] flex flex-col pb-16 selection:bg-[#a33533] selection:text-[#ece7d5]">
-      {/* Mobile Sticky Editorial Header */}
-      <header className="sticky top-0 z-40 bg-[#30292a]/95 backdrop-blur-md border-b border-[#ece7d5]/15 px-4 py-2.5 flex items-center justify-between shadow-md">
-        <button
-          type="button"
-          onClick={() => scrollToSection('hero-section')}
-          className="cursor-pointer text-left focus:outline-none"
-        >
-          <Logo variant="compact" theme="dark" />
-        </button>
-
-        {/* Right Actions: Gallery Checkpoint Button + WhatsApp + Hamburger */}
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => scrollToSection('parallax-cards-section')}
-            className="px-2.5 py-1 text-xs font-sans bg-[#806055] text-[#ece7d5] border border-[#ece7d5]/30 cursor-pointer"
-          >
-            Gallery
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              openDirectWhatsApp(
-                'Hello Vrinda, I am inquiring from the House of Kalakaar mobile portal.'
-              )
-            }
-            className="w-9 h-9 bg-[#a33533] text-[#ece7d5] flex items-center justify-center shadow-xs cursor-pointer active:scale-95 transition-transform"
-            aria-label="Direct WhatsApp"
-          >
-            <MessageCircle className="w-4 h-4" />
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-            className="w-9 h-9 border border-[#ece7d5]/25 flex items-center justify-center text-[#ece7d5] cursor-pointer active:scale-95 transition-transform"
-            aria-label="Toggle Navigation Drawer"
-          >
-            {isDrawerOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-      </header>
-
-      {/* Mobile Slide-Out Drawer */}
-      {isDrawerOpen && (
-        <div className="fixed inset-0 top-[56px] z-50 bg-[#30292a]/80 backdrop-blur-xs flex flex-col">
-          <div className="bg-[#30292a] border-b border-[#a33533] p-6 flex flex-col space-y-4 shadow-2xl">
-            <nav className="flex flex-col space-y-1 divide-y divide-[#ece7d5]/15">
-              {navLinks.map((link) => (
-                <button
-                  key={link.name}
-                  type="button"
-                  onClick={() => scrollToSection(link.targetId)}
-                  className="py-3 text-left text-base font-serif flex items-center justify-between text-[#ece7d5] hover:text-[#a33533] cursor-pointer"
-                >
-                  <span>{link.name}</span>
-                  <ChevronRight className="w-4 h-4 text-[#ece7d5]/50" />
-                </button>
-              ))}
-            </nav>
-
-            <div className="pt-2">
-              <AtelierButton
-                variant="primary"
-                className="w-full justify-center text-sm py-3"
-                icon={<MessageCircle className="w-4 h-4" />}
-                onClick={() => {
-                  setIsDrawerOpen(false);
-                  openDirectWhatsApp();
-                }}
-              >
-                Chat Direct on WhatsApp
-              </AtelierButton>
-            </div>
-          </div>
-        </div>
-      )}
+    <div className="min-h-screen bg-[#837d75] text-[#ece7d5] flex flex-col pb-20 selection:bg-[#a33533] selection:text-[#ece7d5]">
+      {/* Fascinating Floating Frosted Top Navbar */}
+      <TopNavbar isMobile={true} onNavigate={scrollToSection} />
 
       {/* Main Presentation Area */}
       <main className="flex-1">
@@ -217,30 +136,8 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
         </div>
       </footer>
 
-      {/* Thumb-Friendly Sticky Mobile Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#30292a]/95 backdrop-blur-md border-t border-[#ece7d5]/20 p-2 flex items-center gap-2 shadow-2xl">
-        <button
-          type="button"
-          onClick={() =>
-            openDirectWhatsApp(
-              'Hello Vrinda, I would like to inquire about enrolling in House of Kalakaar masterclasses.'
-            )
-          }
-          className="flex-1 bg-[#a33533] text-[#ece7d5] py-2.5 px-3 flex items-center justify-center gap-1.5 text-xs font-medium cursor-pointer shadow-xs active:scale-[0.98]"
-        >
-          <MessageCircle className="w-4 h-4" />
-          <span>Chat on WhatsApp</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => scrollToSection('consultation-section')}
-          className="flex-1 bg-[#806055] text-[#ece7d5] py-2.5 px-3 flex items-center justify-center gap-1.5 text-xs font-medium cursor-pointer shadow-xs active:scale-[0.98]"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-[#ece7d5]" />
-          <span>Apply Now</span>
-        </button>
-      </div>
+      {/* Floating Tool Dock & Chapter Dial */}
+      <BottomNavbar onNavigate={scrollToSection} />
     </div>
   );
 };
