@@ -1,0 +1,43 @@
+{
+  "sectionKicker": "Voices of the Atelier",
+  "sectionTitle": "Loved by Designers, Students & Collectors",
+  "sectionSubtitle": "Read authentic feedback from artists who completed our mentorship cohorts and fashion ateliers who commissioned bespoke works.",
+  "testimonials": [
+    {
+      "id": "t-1",
+      "name": "Kavya Singhania",
+      "role": "Fashion Design Graduate",
+      "location": "NIFT New Delhi",
+      "courseOrProject": "Cohort 15 Couture Masterclass",
+      "content": "Before House of Kalakaar, digital illustration felt flat. Vrinda's brush alchemy and drapery lighting transformed how I sketch my collections.",
+      "rating": 5
+    },
+    {
+      "id": "t-2",
+      "name": "Tanya Sengupta",
+      "role": "Bridal Stationery Founder",
+      "location": "Kolkata",
+      "courseOrProject": "Private Atelier Commission & Mentorship",
+      "content": "The Banarasi zardozi techniques I learned allowed me to charge 3x for bespoke bridal stationery lookbooks. Outstanding mentorship.",
+      "rating": 5
+    },
+    {
+      "id": "t-3",
+      "name": "Simran Ahuja",
+      "role": "Traditional Oil Painter",
+      "location": "Chandigarh",
+      "courseOrProject": "Cohort 16 Procreate Foundations",
+      "content": "Transitioning from canvas to iPad was intimidating. Vrinda's patience and tactile brush settings made it feel like working on real textured paper.",
+      "rating": 5
+    },
+    {
+      "id": "t-4",
+      "name": "Pooja Deshmukh",
+      "role": "Textile Print Designer",
+      "location": "Pune",
+      "courseOrProject": "Cohort 14 Textile & Glazing Cohort",
+      "content": "Hands-down the best Procreate fashion masterclass in India. The step-by-step layer deconstruction method is pure gold.",
+      "rating": 5
+    }
+  ]
+}
