@@ -1,3 +1,6 @@
+---
+trigger: always_on
+---
 # PENDING TASKS & LEDGER INVARIANTS
 
 1. **Single Source of Truth:**
