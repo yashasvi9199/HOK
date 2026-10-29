@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # SEO, CORE WEB VITALS & TELEMETRY STANDARDS
 
 1. **Page Metadata & Structured Data:**
