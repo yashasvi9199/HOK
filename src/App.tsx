@@ -1,20 +1,30 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useDeviceLayout } from './hooks/useDeviceLayout';
 import { DesktopShell } from './views/desktop/DesktopShell';
 import { MobileShell } from './views/mobile/MobileShell';
-import { GalleryPage } from './views/pages/GalleryPage';
-import { FAQPage } from './views/pages/FAQPage';
-import { ContactPage } from './views/pages/ContactPage';
 import { DeviceSwitcherPill } from './components/DeviceSwitcherPill';
 
-// Helper component to ensure window scrolls to top upon page navigation
+// Helper component to handle legacy path redirects to anchor sections
 function ScrollToTop() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [pathname]);
+    if (pathname === '/gallery') {
+      navigate('/', { replace: true });
+      setTimeout(() => {
+        document.getElementById('parallax-cards-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else if (pathname === '/contact' || pathname === '/faq') {
+      navigate('/', { replace: true });
+      setTimeout(() => {
+        document.getElementById('consultation-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }, [pathname, navigate]);
 
   return null;
 }
@@ -23,27 +33,12 @@ function ScrollToTop() {
 function AppContent() {
   const { isMobile, device, overrideMode, setOverrideMode } = useDeviceLayout();
 
-  const routes = (
-    <Routes>
-      <Route path="/" element={null} />
-      <Route path="/gallery" element={<GalleryPage />} />
-      <Route path="/faq" element={<FAQPage />} />
-      <Route path="/contact" element={<ContactPage />} />
-      {/* Catch-all to home */}
-      <Route path="*" element={null} />
-    </Routes>
-  );
-
   return (
     <div className="relative min-h-screen">
       <ScrollToTop />
 
       {/* Hard Platform Split Presentation Shells */}
-      {isMobile ? (
-        <MobileShell>{routes}</MobileShell>
-      ) : (
-        <DesktopShell>{routes}</DesktopShell>
-      )}
+      {isMobile ? <MobileShell /> : <DesktopShell />}
 
       {/* Interactive Device Switcher Pill for reviewer convenience */}
       <DeviceSwitcherPill
@@ -58,7 +53,9 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <Routes>
+        <Route path="*" element={<AppContent />} />
+      </Routes>
     </BrowserRouter>
   );
 }
