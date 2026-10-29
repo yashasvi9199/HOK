@@ -1,6 +1,0 @@
-/* Isolated styles for Skiper19 SVG follow scroll animation */
-.skiper19-svg {
-  pointer-events: none;
-  overflow: visible;
-  will-change: stroke-dashoffset;
-}
