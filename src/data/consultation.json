@@ -1,0 +1,82 @@
+{
+  "sectionKicker": "Atelier Admissions & Consultation",
+  "sectionTitle": "Begin Your Mentorship with Vrinda",
+  "sectionSubtitle": "Complete this 4-step creative intake to configure your tailored curriculum and connect directly with Vrinda Haldia and the studio admissions desk via WhatsApp.",
+  "cohortBanner": "Admissions Active for Signature Procreate Couture Cohort 17 · 20 Atelier Seats Only",
+  "steps": [
+    {
+      "step": 1,
+      "title": "Creative Focus",
+      "question": "What is your primary artistic ambition?",
+      "options": [
+        {
+          "id": "focus-couture",
+          "label": "Bridal Couture & Haute Fashion",
+          "desc": "Mastering lehenga drapes, zardozi embroidery, and runway croquis."
+        },
+        {
+          "id": "focus-portraits",
+          "label": "Digital Portraiture & Still Life",
+          "desc": "Skin undertones, expressive eyes, and ceramic still life compositions."
+        },
+        {
+          "id": "focus-brand",
+          "label": "Brand Commissions & Lookbooks",
+          "desc": "Commercial luxury illustrations for fashion labels and publishing."
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "title": "Experience Profile",
+      "question": "What is your current artistic background?",
+      "options": [
+        {
+          "id": "exp-beginner",
+          "label": "Complete Beginner to Digital Art",
+          "desc": "Zero digital experience. Need foundational, step-by-step layer guidance."
+        },
+        {
+          "id": "exp-traditional",
+          "label": "Traditional Painter Going Digital",
+          "desc": "Experienced in watercolor/gouache/oil pastel transitioning to iPad Pro."
+        },
+        {
+          "id": "exp-intermediate",
+          "label": "Intermediate Procreate User",
+          "desc": "Know basic Procreate tools; seeking advanced couture glazing & brushcraft."
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "title": "Hardware Setup",
+      "question": "What stylus and tablet will you be using?",
+      "options": [
+        {
+          "id": "hw-ready",
+          "label": "iPad Pro / Air with Apple Pencil",
+          "desc": "Hardware ready to load the House of Kalakaar brushpack immediately."
+        },
+        {
+          "id": "hw-planning",
+          "label": "Planning to Purchase iPad Soon",
+          "desc": "Need guidance on iPad generation, screen size, and Apple Pencil models."
+        },
+        {
+          "id": "hw-other",
+          "label": "Wacom / Galaxy Tab Stylus",
+          "desc": "Using alternative hardware or desktop digital illustration software."
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "title": "Atelier Contact",
+      "question": "Where should Vrinda and the admissions desk send your syllabus?",
+      "nameLabel": "Your Full Name *",
+      "phoneLabel": "WhatsApp Number *",
+      "cta": "Submit Consultation & Chat on WhatsApp"
+    }
+  ]
+}
