@@ -1,15 +1,29 @@
 @import "tailwindcss";
 
+@theme {
+  /* Global Color Grading Tokens */
+  --color-smoke-whisper: #ece7d5;   /* Primary Color: Smoke Whisper */
+  --color-weathered-steel: #837d75; /* Background Color: Weathered Steel */
+  --color-drystone-clay: #806055;   /* Secondary Color: Drystone Clay */
+  --color-cindered-red: #a33533;    /* Highlight Color: Cindered Red */
+  --color-obsidian-veil: #30292a;   /* Other Color: Obsidian Veil */
+
+  /* Legacy & semantic aliases */
+  --color-primary: #ece7d5;
+  --color-background: #837d75;
+  --color-secondary: #806055;
+  --color-highlight: #a33533;
+  --color-obsidian: #30292a;
+}
+
 @layer base {
   :root {
-    /* Global Color Grading */
-    --color-primary: #ece7d5;    /* smoke whisper */
-    --color-background: #837d75; /* weathered steel */
-    --color-secondary: #806055;  /* Drystone clay */
-    --color-highlight: #a33533;  /* cindered red */
-    --color-obsidian: #30292a;   /* obsidian veil */
+    --color-primary: #ece7d5;
+    --color-background: #837d75;
+    --color-secondary: #806055;
+    --color-highlight: #a33533;
+    --color-obsidian: #30292a;
 
-    /* Typography */
     --font-serif: 'Cormorant Garamond', Georgia, serif;
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-script: 'Pinyon Script', cursive;
@@ -17,11 +31,13 @@
     --font-afrocultures: 'Afrocultures', 'Syne', 'Righteous', sans-serif;
   }
 
-  html {
+  html, body {
     scroll-behavior: smooth;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     background-color: #837d75;
     color: #ece7d5;
+    margin: 0;
+    padding: 0;
   }
 }
 
