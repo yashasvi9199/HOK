@@ -17,14 +17,14 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = ({
   containerSize = 'default',
 }) => {
   const bgClasses = {
-    steel: 'bg-[#837d75] text-[#ece7d5]',
-    clay: 'bg-[#806055] text-[#ece7d5] border-y border-[#ece7d5]/20',
+    steel: 'bg-[#837d75] text-[#ece7d5] border-b border-[#30292a]/25',
+    clay: 'bg-[#806055] text-[#ece7d5] border-y border-[#30292a]/30',
     whisper: 'bg-[#ece7d5] text-[#30292a]',
-    obsidian: 'bg-[#30292a] text-[#ece7d5] border-y border-[#ece7d5]/15',
+    obsidian: 'bg-[#30292a] text-[#ece7d5] border-y border-[#30292a]/40',
     // Map legacy tokens to the new Global Color Grading
     linen: 'bg-[#837d75] text-[#ece7d5]',
-    alabaster: 'bg-[#30292a] text-[#ece7d5] border-y border-[#ece7d5]/15',
-    cream: 'bg-[#806055] text-[#ece7d5] border-y border-[#ece7d5]/20',
+    alabaster: 'bg-[#837d75] text-[#ece7d5] border-b border-[#30292a]/25',
+    cream: 'bg-[#806055] text-[#ece7d5] border-y border-[#30292a]/30',
     charcoal: 'bg-[#30292a] text-[#ece7d5]',
   }[bg];
 
