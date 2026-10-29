@@ -1,0 +1,62 @@
+{
+  "sectionKicker": "Academy Spotlight",
+  "sectionTitle": "Student Transformations & Works",
+  "sectionSubtitle": "See how aspiring fashion designers, traditional painters, and absolute beginners brought their creative visions to life in our Procreate cohorts.",
+  "categories": [
+    "All",
+    "Beginner's First Piece",
+    "Fashion Sketching",
+    "Portrait Shading",
+    "Couture Rendering"
+  ],
+  "works": [
+    {
+      "id": "student-1",
+      "title": "Royal Marwar Bridal Drape",
+      "studentName": "Ananya Sharma",
+      "studentHandle": "@ananya.sketches",
+      "city": "Mumbai",
+      "tag": "Couture Rendering",
+      "workshopBatch": "Cohort 15 Graduate",
+      "beforeNote": "Never held an Apple Pencil before joining; worked only with watercolours.",
+      "quote": "Vrinda taught me how to shade gold zardozi so that it looks like real metallic thread on silk.",
+      "palette": ["#a33533", "#d4b483", "#ece7d5", "#30292a"]
+    },
+    {
+      "id": "student-2",
+      "title": "Minimalist Runway Silhouette",
+      "studentName": "Rhea Merchant",
+      "studentHandle": "@rhea.couture",
+      "city": "Bengaluru",
+      "tag": "Fashion Sketching",
+      "workshopBatch": "Cohort 14 Graduate",
+      "beforeNote": "Struggled with digital line confidence and 9-head proportions.",
+      "quote": "The 9-head croquis shortcuts and loose wrist technique changed my entire workflow in 2 weeks.",
+      "palette": ["#30292a", "#837d75", "#ece7d5", "#806055"]
+    },
+    {
+      "id": "student-3",
+      "title": "Jaipur Saffron Study",
+      "studentName": "Devika Pillai",
+      "studentHandle": "@devikapillai_art",
+      "city": "Kochi",
+      "tag": "Beginner's First Piece",
+      "workshopBatch": "Cohort 16 Graduate",
+      "beforeNote": "Total beginner to digital art; was overwhelmed by Procreate layers.",
+      "quote": "The zero-jargon mentorship made layers so intuitive. This was my very first finished digital canvas!",
+      "palette": ["#806055", "#ece7d5", "#d4b483", "#a33533"]
+    },
+    {
+      "id": "student-4",
+      "title": "Chiaroscuro Pearl Portrait",
+      "studentName": "Meera Chawla",
+      "studentHandle": "@meerachawla.design",
+      "city": "New Delhi",
+      "tag": "Portrait Shading",
+      "workshopBatch": "Cohort 12 Graduate",
+      "beforeNote": "Could draw faces but struggled with skin undertones and reflective jewellery.",
+      "quote": "Understanding skin temperature and specular highlights gave my bridal stationery illustrations life.",
+      "palette": ["#ece7d5", "#806055", "#a33533", "#30292a"]
+    }
+  ]
+}
