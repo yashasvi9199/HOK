@@ -1,0 +1,95 @@
+{
+  "sectionTitle": "02 · DIGITAL MEDIA",
+  "marqueeText": "LOGBOOK MAGAZINE ART | LOGBOOK MAGAZINE ART |",
+  "marqueeSpeed": "22s",
+  "carouselTopSpeed": "38s",
+  "carouselBottomSpeed": "38s",
+  "topRow": [
+    {
+      "id": "dm-t1",
+      "title": "SOLAR COUTURE DRAPE",
+      "issue": "ISSUE 01",
+      "subject": "illustration_drape",
+      "palette": ["#ece7d5", "#a33533", "#806055", "#30292a"]
+    },
+    {
+      "id": "dm-t2",
+      "title": "VELVET NOCTURNE STUDY",
+      "issue": "ISSUE 02",
+      "subject": "digital_velvet_4",
+      "palette": ["#30292a", "#a33533", "#ece7d5", "#837d75"]
+    },
+    {
+      "id": "dm-t3",
+      "title": "CRIMSON SILK & OCHRE",
+      "issue": "ISSUE 03",
+      "subject": "digital_couture_2",
+      "palette": ["#a33533", "#d4b483", "#ece7d5", "#30292a"]
+    },
+    {
+      "id": "dm-t4",
+      "title": "HERITAGE ZARDOZI ARCHIVE",
+      "issue": "ISSUE 04",
+      "subject": "digital_heritage_5",
+      "palette": ["#806055", "#ece7d5", "#d4b483", "#30292a"]
+    },
+    {
+      "id": "dm-t5",
+      "title": "PASTEL IMPASTO CROQUIS",
+      "issue": "ISSUE 05",
+      "subject": "composition_abstract",
+      "palette": ["#837d75", "#ece7d5", "#806055", "#a33533"]
+    },
+    {
+      "id": "dm-t6",
+      "title": "ATELIER VESSELS & LINEN",
+      "issue": "ISSUE 06",
+      "subject": "stilllife_vessels",
+      "palette": ["#806055", "#ece7d5", "#30292a", "#d4b483"]
+    }
+  ],
+  "bottomRow": [
+    {
+      "id": "dm-b1",
+      "title": "CHIAROSCURO GAZE",
+      "issue": "VOL. I",
+      "subject": "illustration_portrait",
+      "palette": ["#30292a", "#806055", "#ece7d5", "#a33533"]
+    },
+    {
+      "id": "dm-b2",
+      "title": "ROYAL BOTANICAL CROWN",
+      "issue": "VOL. II",
+      "subject": "stilllife_botanical",
+      "palette": ["#ece7d5", "#a33533", "#30292a", "#806055"]
+    },
+    {
+      "id": "dm-b3",
+      "title": "THE ARTIST TABLE STUDY",
+      "issue": "VOL. III",
+      "subject": "composition_atelier",
+      "palette": ["#806055", "#ece7d5", "#d4b483", "#30292a"]
+    },
+    {
+      "id": "dm-b4",
+      "title": "GILDED BANARASI WEAVE",
+      "issue": "VOL. IV",
+      "subject": "digital_couture_1",
+      "palette": ["#d4b483", "#a33533", "#ece7d5", "#30292a"]
+    },
+    {
+      "id": "dm-b5",
+      "title": "EDITORIAL MONOGRAPH",
+      "issue": "VOL. V",
+      "subject": "digital_editorial_3",
+      "palette": ["#837d75", "#ece7d5", "#30292a", "#806055"]
+    },
+    {
+      "id": "dm-b6",
+      "title": "LUMINOUS GLAZE PORTRAIT",
+      "issue": "VOL. VI",
+      "subject": "digital_glaze_6",
+      "palette": ["#ece7d5", "#806055", "#a33533", "#30292a"]
+    }
+  ]
+}
