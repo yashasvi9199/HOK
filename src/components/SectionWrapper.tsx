@@ -1,8 +1,9 @@
 import React from 'react';
+import { motion } from 'motion/react';
 
 interface SectionWrapperProps {
   id?: string;
-  bg?: 'linen' | 'alabaster' | 'cream' | 'charcoal';
+  bg?: 'steel' | 'clay' | 'whisper' | 'obsidian' | 'linen' | 'alabaster' | 'cream' | 'charcoal';
   className?: string;
   children: React.ReactNode;
   containerSize?: 'default' | 'narrow' | 'wide' | 'full';
@@ -10,16 +11,21 @@ interface SectionWrapperProps {
 
 export const SectionWrapper: React.FC<SectionWrapperProps> = ({
   id,
-  bg = 'linen',
+  bg = 'steel',
   className = '',
   children,
   containerSize = 'default',
 }) => {
   const bgClasses = {
-    linen: 'bg-[#FAF7F2] text-[#1C1917]',
-    alabaster: 'bg-[#FFFFFF] text-[#1C1917] border-y border-[#F0ECE1]',
-    cream: 'bg-[#F5EFEB] text-[#1C1917]',
-    charcoal: 'bg-[#1C1917] text-[#FAF7F2]',
+    steel: 'bg-[#837d75] text-[#ece7d5]',
+    clay: 'bg-[#806055] text-[#ece7d5] border-y border-[#ece7d5]/20',
+    whisper: 'bg-[#ece7d5] text-[#30292a]',
+    obsidian: 'bg-[#30292a] text-[#ece7d5] border-y border-[#ece7d5]/15',
+    // Map legacy tokens to the new Global Color Grading
+    linen: 'bg-[#837d75] text-[#ece7d5]',
+    alabaster: 'bg-[#30292a] text-[#ece7d5] border-y border-[#ece7d5]/15',
+    cream: 'bg-[#806055] text-[#ece7d5] border-y border-[#ece7d5]/20',
+    charcoal: 'bg-[#30292a] text-[#ece7d5]',
   }[bg];
 
   const containerClasses = {
@@ -30,8 +36,16 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = ({
   }[containerSize];
 
   return (
-    <section id={id} className={`py-16 md:py-24 relative ${bgClasses} ${className}`}>
-      <div className={containerClasses}>{children}</div>
+    <section id={id} className={`py-16 md:py-24 relative overflow-hidden ${bgClasses} ${className}`}>
+      <motion.div
+        initial={{ opacity: 0, y: 42 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+        className={containerClasses}
+      >
+        {children}
+      </motion.div>
     </section>
   );
 };
