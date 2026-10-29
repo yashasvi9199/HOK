@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # DOCUMENTATION & LEDGER INVARIANTS
 
 1. **Explicit Trigger & SemVer Sync:**
