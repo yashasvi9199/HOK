@@ -254,14 +254,14 @@ export const ArtworkLayerDeconstructor: React.FC = () => {
   return (
     <section
       id="anatomy-section"
-      className="py-24 md:py-32 bg-[#30292a] text-[#ece7d5] relative overflow-hidden border-b border-[#ece7d5]/15 select-none"
+      className="py-24 md:py-32 bg-[#837d75] text-[#ece7d5] relative overflow-hidden border-b border-[#30292a]/30 select-none"
     >
       {/* Background Radial Glow */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-40"
+        className="absolute inset-0 pointer-events-none opacity-30"
         style={{
           background:
-            'radial-gradient(circle at 65% 45%, rgba(163, 53, 51, 0.35) 0%, rgba(128, 96, 85, 0.2) 50%, rgba(48, 41, 42, 0) 100%)',
+            'radial-gradient(circle at 65% 45%, rgba(163, 53, 51, 0.25) 0%, rgba(128, 96, 85, 0.3) 50%, rgba(48, 41, 42, 0.4) 100%)',
         }}
       />
 
