@@ -1,65 +1,39 @@
-import { useState, useEffect, useCallback } from 'react';
-import type { DeviceType } from '../features/device/device.types';
+import { useState, useEffect } from 'react';
+import { DeviceType } from '../types';
 
-// * Device layout responsive breakpoint state contract
 export interface DeviceLayoutState {
-  readonly device: DeviceType;
-  readonly isMobile: boolean;
-  readonly isTablet: boolean;
-  readonly isDesktop: boolean;
-  readonly width: number;
-  readonly overrideMode: 'auto' | 'mobile' | 'desktop';
-  readonly setOverrideMode: (mode: 'auto' | 'mobile' | 'desktop') => void;
+  device: DeviceType;
+  isMobile: boolean;
+  isTablet: boolean;
+  isDesktop: boolean;
+  width: number;
+  overrideMode: 'auto' | 'mobile' | 'desktop';
+  setOverrideMode: (mode: 'auto' | 'mobile' | 'desktop') => void;
 }
 
-// * Hook tracking window resize events with SSR safe initializers and manual toggle override
 export function useDeviceLayout(): DeviceLayoutState {
   const [width, setWidth] = useState<number>(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        return window.innerWidth;
-      }
-    } catch {
-      // ! Default fallback for non-browser SSR execution
+    if (typeof window !== 'undefined') {
+      return window.innerWidth;
     }
     return 1200;
   });
 
-  const [overrideMode, setOverrideModeState] = useState<'auto' | 'mobile' | 'desktop'>('auto');
-
-  const setOverrideMode = useCallback((mode: 'auto' | 'mobile' | 'desktop') => {
-    try {
-      setOverrideModeState(mode);
-    } catch (error) {
-      console.error('Failed to set device override mode:', error);
-    }
-  }, []);
+  const [overrideMode, setOverrideMode] = useState<'auto' | 'mobile' | 'desktop'>('auto');
 
   useEffect(() => {
     const handleResize = () => {
-      try {
-        setWidth(window.innerWidth);
-      } catch (error) {
-        console.error('Error updating viewport width on resize:', error);
-      }
+      setWidth(window.innerWidth);
     };
 
-    try {
-      window.addEventListener('resize', handleResize);
-    } catch (error) {
-      console.error('Error attaching resize event listener:', error);
-    }
-
-    return () => {
-      try {
-        window.removeEventListener('resize', handleResize);
-      } catch (error) {
-        console.error('Error removing resize event listener:', error);
-      }
-    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // * Strict breakpoint evaluations: Mobile < 768px, Tablet 768px - 1023px, Desktop >= 1024px
+  // Breakpoints:
+  // Mobile: < 768px
+  // Tablet: >= 768px && < 1024px
+  // Desktop: >= 1024px
   const detectedDevice: DeviceType =
     width < 768 ? 'mobile' : width < 1024 ? 'tablet' : 'desktop';
 
@@ -67,8 +41,8 @@ export function useDeviceLayout(): DeviceLayoutState {
     overrideMode === 'auto'
       ? detectedDevice
       : overrideMode === 'mobile'
-        ? 'mobile'
-        : 'desktop';
+      ? 'mobile'
+      : 'desktop';
 
   return {
     device: effectiveDevice,
