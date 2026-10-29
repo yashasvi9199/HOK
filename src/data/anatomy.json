@@ -1,0 +1,61 @@
+{
+  "sectionKicker": "Interactive Technical Study",
+  "sectionTitle": "The Anatomy of a Couture Canvas",
+  "sectionSubtitle": "Deconstruct a royal Banarasi couture illustration across its 4 foundational Procreate layers — from gesture croquis to 24k zardozi glaze.",
+  "canvasSpecs": {
+    "dimensions": "4000 × 5200 px",
+    "resolution": "300 DPI Ultra HD",
+    "colorSpace": "Display P3 Wide Gamut",
+    "totalLayers": "68 Layers in Master File"
+  },
+  "layers": [
+    {
+      "id": "layer-1",
+      "index": 1,
+      "name": "01. The 9-Head Runway Croquis",
+      "category": "Foundation & Gesture",
+      "blendMode": "Normal",
+      "brush": "Atelier Sable 2B Graphite",
+      "opacity": 100,
+      "description": "Elongated 9-head haute couture gesture lines defining shoulder tilt, hip cant, and fabric flow lines.",
+      "palette": ["#30292a", "#837d75", "#ece7d5"],
+      "techniqueTip": "Keep wrist loose and draw from the shoulder for unbroken, dynamic garment curves."
+    },
+    {
+      "id": "layer-2",
+      "index": 2,
+      "name": "02. Underpainting & Gouache Wash",
+      "category": "Tonal Mapping",
+      "blendMode": "Multiply",
+      "brush": "Wet-in-Wet Raw Silk Sponge",
+      "opacity": 90,
+      "description": "Warm drystone clay and amber undertones mapped across facial planes and silk drape understructures.",
+      "palette": ["#806055", "#ece7d5", "#d4b483"],
+      "techniqueTip": "Establish the primary light source angle before laying down saturated pigment."
+    },
+    {
+      "id": "layer-3",
+      "index": 3,
+      "name": "03. Velvet Drapery & Chiaroscuro",
+      "category": "Volume & Dimension",
+      "blendMode": "Multiply",
+      "brush": "Couture Velvet Shader & Blending Stump",
+      "opacity": 95,
+      "description": "Deep obsidian and cindered red shadow recesses giving heavy royal textile folds tactile weight.",
+      "palette": ["#a33533", "#30292a", "#806055"],
+      "techniqueTip": "Use soft blending stumps on outer drapery bends and razor edges in deep fold crevasses."
+    },
+    {
+      "id": "layer-4",
+      "index": 4,
+      "name": "04. 24k Zardozi Embroidery & Glaze",
+      "category": "Specular Finish",
+      "blendMode": "Color Dodge / Add",
+      "brush": "Pure Gold Leaf Flake & Polki Facet",
+      "opacity": 100,
+      "description": "Hand-rendered pure gold metallic thread embroidery, gemstone specular highlights, and luminous fabric gleam.",
+      "palette": ["#ece7d5", "#d4b483", "#ffffff", "#a33533"],
+      "techniqueTip": "Concentrate specular highlights strictly at the apex of curves where studio light hits perpendicularly."
+    }
+  ]
+}
