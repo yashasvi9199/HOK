@@ -1,7 +1,9 @@
 import React from 'react';
 
+export const BRAND_LOGO_URL = '/assets/aistudio/Logo_png_149a4d82.png';
+
 interface LogoProps {
-  variant?: 'full' | 'monogram' | 'compact';
+  variant?: 'full' | 'monogram' | 'compact' | 'hero';
   className?: string;
   theme?: 'dark' | 'light';
 }
@@ -9,38 +11,58 @@ interface LogoProps {
 export const Logo: React.FC<LogoProps> = ({
   variant = 'full',
   className = '',
-  theme = 'light'
+  theme = 'dark',
 }) => {
   const isDark = theme === 'dark';
-  const textColor = isDark ? 'text-stone-100' : 'text-[#1C1917]';
-  const subColor = isDark ? 'text-stone-400' : 'text-[#78716C]';
-  const goldColor = '#C5A059';
+  const textColor = isDark ? 'text-[#ece7d5]' : 'text-[#30292a]';
+  const subColor = isDark ? 'text-[#ece7d5]/75' : 'text-[#806055]';
+
+  if (variant === 'hero') {
+    return (
+      <div className={`inline-flex flex-col items-center select-none ${className}`}>
+        <div className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 flex items-center justify-center">
+          <img
+            src={BRAND_LOGO_URL}
+            alt="House of Kalakaar by Vrinda Haldia Logo"
+            className="w-full h-full object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.55)]"
+            referrerPolicy="no-referrer"
+          />
+        </div>
+      </div>
+    );
+  }
 
   if (variant === 'monogram') {
     return (
       <div className={`inline-flex items-center gap-2 select-none ${className}`}>
-        <img
-          src="/Logo.png"
-          alt="House of Kalakaar"
-          className="w-10 h-10 object-contain rounded-full shadow-xs"
-        />
+        <div className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center relative">
+          <img
+            src={BRAND_LOGO_URL}
+            alt="HK Monogram"
+            className="w-full h-full object-contain scale-110"
+            referrerPolicy="no-referrer"
+          />
+        </div>
       </div>
     );
   }
 
   if (variant === 'compact') {
     return (
-      <div className={`inline-flex items-center gap-3 select-none ${className}`}>
-        <img
-          src="/Logo.png"
-          alt="House of Kalakaar"
-          className="w-9 h-9 object-contain"
-        />
+      <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
+        <div className="w-11 h-11 overflow-hidden flex items-center justify-center shrink-0">
+          <img
+            src={BRAND_LOGO_URL}
+            alt="House of Kalakaar Logo"
+            className="w-full h-full object-contain scale-115"
+            referrerPolicy="no-referrer"
+          />
+        </div>
         <div className="flex flex-col">
-          <span className={`font-serif text-base tracking-wide font-medium ${textColor}`}>
+          <span className={`font-serif text-base tracking-wide font-semibold whitespace-nowrap ${textColor}`}>
             House of Kalakaar
           </span>
-          <span className="text-[10px] tracking-widest uppercase font-sans text-[#78716C]">
+          <span className={`text-[10px] tracking-widest uppercase font-sans whitespace-nowrap ${subColor}`}>
             by Vrinda Haldia
           </span>
         </div>
@@ -50,21 +72,20 @@ export const Logo: React.FC<LogoProps> = ({
 
   return (
     <div className={`inline-flex items-center gap-3.5 select-none ${className}`}>
-      {/* Brand Emblem from Logo.png */}
-      <img
-        src="/Logo.png"
-        alt="House of Kalakaar"
-        className="w-11 h-11 object-contain drop-shadow-xs group-hover:scale-105 transition-transform"
-      />
+      <div className="relative w-14 h-14 flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105">
+        <img
+          src={BRAND_LOGO_URL}
+          alt="House of Kalakaar by Vrinda Haldia"
+          className="w-full h-full object-contain scale-115 drop-shadow-md"
+          referrerPolicy="no-referrer"
+        />
+      </div>
 
-      {/* Brand Typographic Identity */}
       <div className="flex flex-col text-left">
-        <div className="flex items-center gap-1.5">
-          <span className={`font-serif text-lg md:text-xl font-semibold tracking-tight ${textColor} leading-tight`}>
-            House of Kalakaar
-          </span>
-        </div>
-        <span className={`text-[10px] sm:text-[11px] font-sans tracking-[0.22em] uppercase font-medium ${subColor}`}>
+        <span className={`font-serif text-lg md:text-xl font-semibold tracking-tight whitespace-nowrap ${textColor} leading-tight`}>
+          House of Kalakaar
+        </span>
+        <span className={`text-[10px] sm:text-[11px] font-sans tracking-[0.22em] uppercase font-medium whitespace-nowrap ${subColor}`}>
           by Vrinda Haldia
         </span>
       </div>
