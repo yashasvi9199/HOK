@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # DPDP & REGULATORY COMPLIANCE INVARIANTS
 
 1. **Explicit Affirmative Consent Gate:**
