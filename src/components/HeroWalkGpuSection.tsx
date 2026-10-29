@@ -463,14 +463,14 @@ export const HeroWalkGpuSection: React.FC<HeroWalkGpuSectionProps> = ({
       onMouseLeave={() => {
         pointerRef.current.active = false;
       }}
-      className="relative min-h-[88vh] w-full overflow-hidden bg-[#30292a] text-[#ece7d5] flex items-center justify-center border-b border-[#ece7d5]/15 select-none"
+      className="relative min-h-[88vh] w-full overflow-hidden bg-[#837d75] text-[#ece7d5] flex items-center justify-center border-b border-[#30292a]/30 select-none"
     >
-      {/* Background Weathered Steel & Obsidian Atmospheric Mesh */}
+      {/* Background Weathered Steel Atmospheric Mesh */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'radial-gradient(circle at 50% 35%, rgba(131, 125, 117, 0.42) 0%, rgba(128, 96, 85, 0.28) 45%, rgba(48, 41, 42, 0.96) 100%)',
+            'radial-gradient(circle at 50% 38%, rgba(131, 125, 117, 0.95) 0%, rgba(128, 96, 85, 0.65) 55%, rgba(48, 41, 42, 0.85) 100%)',
         }}
       />
 
