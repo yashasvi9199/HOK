@@ -1,0 +1,36 @@
+{
+  "kicker": "Founder & Masterclass Mentor",
+  "name": "Vrinda Haldia",
+  "role": "Fashion Designer, Lead Artist & Educator",
+  "signatureQuote": "Art that breathes authenticity.",
+  "headline": "Bridging Royal Heritage with Procreate Tactility.",
+  "voiceNote": {
+    "title": "A Note on Tactile Authenticity",
+    "speaker": "Vrinda Haldia",
+    "duration": "01:42",
+    "transcript": "When I left traditional gouache and gold leaf for the iPad Pro, I missed the friction of cotton paper and the raw weight of pigment. That is why we calibrated every single brush in our library to resist the smooth glass screen and honor real Indian handloom craft."
+  },
+  "fragments": [
+    {
+      "badge": "Classical Roots",
+      "title": "Decade of Haute Couture",
+      "text": "Trained in classical fashion design and Indian textiles, sketching runway collections with pure gouache and gold leaves."
+    },
+    {
+      "badge": "Brush Science",
+      "title": "35+ Proprietary Brushes",
+      "text": "Hand-calibrating pressure curves and dual-texture engines to capture zardozi metallic thread sheen and organza grain."
+    },
+    {
+      "badge": "Global Impact",
+      "title": "2,500+ Mentored Artists",
+      "text": "Empowering beginner illustrators and bridal ateliers across 18 countries to master confident iPad Pro craftsmanship."
+    }
+  ],
+  "stats": [
+    { "value": "2,500+", "label": "Artists Mentored" },
+    { "value": "35+", "label": "Tactile Brushes" },
+    { "value": "18", "label": "Countries Reached" },
+    { "value": "100%", "label": "Hand-Drawn Tactile" }
+  ]
+}
