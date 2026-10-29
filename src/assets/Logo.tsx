@@ -1,8 +1,6 @@
 import React from 'react';
 
-
-// export const BRAND_LOGO_URL = '/assets/aistudio/Logo_png_149a4d82.png';
-export const BRAND_LOGO_URL = '/public/Logo png.png';
+export const BRAND_LOGO_URL = '/Logo png.png';
 
 interface LogoProps {
   variant?: 'full' | 'monogram' | 'compact' | 'hero';
