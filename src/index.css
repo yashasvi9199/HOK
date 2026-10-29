@@ -2,14 +2,26 @@
 
 @layer base {
   :root {
+    /* Global Color Grading */
+    --color-primary: #ece7d5;    /* smoke whisper */
+    --color-background: #837d75; /* weathered steel */
+    --color-secondary: #806055;  /* Drystone clay */
+    --color-highlight: #a33533;  /* cindered red */
+    --color-obsidian: #30292a;   /* obsidian veil */
+
+    /* Typography */
     --font-serif: 'Cormorant Garamond', Georgia, serif;
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-script: 'Pinyon Script', cursive;
+    --font-splash: 'Splash Tropical', 'Kaushan Script', 'Splash', cursive;
+    --font-afrocultures: 'Afrocultures', 'Syne', 'Righteous', sans-serif;
   }
 
   html {
     scroll-behavior: smooth;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #837d75;
+    color: #ece7d5;
   }
 }
 
@@ -23,6 +35,95 @@
 
 .font-script {
   font-family: 'Pinyon Script', cursive;
+}
+
+/* Splash Tropical Font for Section 2.01 About Us */
+.font-splash {
+  font-family: 'Kaushan Script', 'Splash', cursive;
+  letter-spacing: 0.02em;
+}
+
+.font-splash-display {
+  font-family: 'Splash', 'Kaushan Script', cursive;
+  letter-spacing: 0.04em;
+}
+
+/* Afrocultures Font for Section 2.02 Digital Media */
+.font-afrocultures {
+  font-family: 'Syne', 'Righteous', sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* 3D Book Perspective Utilities */
+.perspective-book {
+  perspective: 2200px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.book-spine-origin {
+  transform-origin: left center;
+}
+
+/* Keyframe Marquee Animations for Digital Media Red Strips */
+@keyframes marquee-rtl {
+  0% {
+    transform: translate3d(0%, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes carousel-rtl {
+  0% {
+    transform: translate3d(0%, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes carousel-ltr {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0%, 0, 0);
+  }
+}
+
+.animate-marquee-rtl {
+  display: flex;
+  width: max-content;
+  animation: marquee-rtl 22s linear infinite;
+  will-change: transform;
+}
+
+.animate-carousel-rtl {
+  display: flex;
+  width: max-content;
+  animation: carousel-rtl 38s linear infinite;
+  will-change: transform;
+}
+
+.animate-carousel-ltr {
+  display: flex;
+  width: max-content;
+  animation: carousel-ltr 38s linear infinite;
+  will-change: transform;
+}
+
+.animate-carousel-rtl:hover,
+.animate-carousel-ltr:hover {
+  animation-play-state: paused;
 }
 
 /* Hide scrollbar for carousel while preserving scrolling */
