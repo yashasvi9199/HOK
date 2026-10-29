@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # SECURITY & DATA VALIDATION INVARIANTS
 
 1. **Zero-Trust Schema Validation:** Every incoming API payload, query param, and path variable must be validated against a strict schema (e.g., Zod, Valibot) checking type, length, and format. Reject non-matching data immediately; do not rely on loose sanitization.
