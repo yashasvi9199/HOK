@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # FRONTEND UI/UX, MOTION & MOBILE STANDARDS
 
 1. **Architecture & State Partitioning:**
