@@ -1,37 +1,23 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { Quote, MapPin } from 'lucide-react';
-import { STUDENT_WORKS } from '../data/studentWork';
-import { StudentWork } from '../types';
+import studentData from '../data/student_work.json';
 import { generateOilPastelArtwork, PastelSubject } from '../utils/proceduralArtGenerator';
-
-interface StudentWorkGridProps {
-  onSelectStudentWork?: (work: StudentWork) => void;
-}
+import { LiveColorPaletteOverlay } from './LiveColorPaletteOverlay';
 
 const STUDENT_SUBJECTS: PastelSubject[] = [
   'stilllife_vessels',
   'illustration_drape',
   'illustration_portrait',
   'digital_couture_2',
-  'composition_atelier',
-  'stilllife_botanical',
 ];
 
-export const StudentWorkGrid: React.FC<StudentWorkGridProps> = () => {
+export const StudentWorkGrid: React.FC = () => {
   const [selectedTag, setSelectedTag] = useState<string>('All');
-
-  const tags = [
-    'All',
-    "Beginner's First Piece",
-    'Fashion Sketching',
-    'Portrait Shading',
-    'Couture Rendering',
-  ];
 
   const artUrls = useMemo(() => {
     const map: Record<string, string> = {};
-    STUDENT_WORKS.forEach((work, i) => {
+    studentData.works.forEach((work, i) => {
       const subj = STUDENT_SUBJECTS[i % STUDENT_SUBJECTS.length];
       map[work.id] = generateOilPastelArtwork(subj, 800, 600);
     });
@@ -40,14 +26,14 @@ export const StudentWorkGrid: React.FC<StudentWorkGridProps> = () => {
 
   const filtered =
     selectedTag === 'All'
-      ? STUDENT_WORKS
-      : STUDENT_WORKS.filter((item) => item.tag === selectedTag);
+      ? studentData.works
+      : studentData.works.filter((item) => item.tag === selectedTag);
 
   return (
     <div>
-      {/* Interactive Filter Control Bar */}
+      {/* Category Filter Controls */}
       <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-        {tags.map((tag) => {
+        {studentData.categories.map((tag) => {
           const isActive = selectedTag === tag;
           return (
             <button
@@ -56,7 +42,7 @@ export const StudentWorkGrid: React.FC<StudentWorkGridProps> = () => {
               onClick={() => setSelectedTag(tag)}
               className={`px-4 py-2 text-xs font-sans tracking-wide transition-all border cursor-pointer whitespace-nowrap shrink-0 ${
                 isActive
-                  ? 'bg-[#a33533] text-[#ece7d5] border-[#a33533]'
+                  ? 'bg-[#a33533] text-[#ece7d5] border-[#a33533] shadow-xs'
                   : 'bg-[#30292a] text-[#ece7d5]/80 border-[#ece7d5]/20 hover:border-[#ece7d5] hover:text-[#ece7d5]'
               }`}
             >
@@ -66,7 +52,7 @@ export const StudentWorkGrid: React.FC<StudentWorkGridProps> = () => {
         })}
       </div>
 
-      {/* Showcase Cards Grid with Scroll Animations */}
+      {/* Student Work Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
         {filtered.map((work, index) => (
           <motion.div
@@ -75,23 +61,30 @@ export const StudentWorkGrid: React.FC<StudentWorkGridProps> = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.55, delay: index * 0.08 }}
-            className="bg-[#30292a] text-[#ece7d5] border border-[#ece7d5]/20 hover:border-[#a33533] transition-all duration-300 shadow-lg flex flex-col overflow-hidden group"
+            className="bg-[#30292a] text-[#ece7d5] border border-[#ece7d5]/20 hover:border-[#a33533] transition-all duration-300 shadow-xl flex flex-col overflow-hidden group relative"
           >
-            {/* Artwork Frame */}
-            <div className="relative aspect-[4/3] bg-[#30292a] overflow-hidden">
+            {/* Artwork Frame with Live Color Palette Extractor */}
+            <div className="relative aspect-[4/3] bg-[#1a1718] overflow-hidden">
               <img
-                src={artUrls[work.id] || work.artworkUrl}
+                src={artUrls[work.id]}
                 alt={work.title}
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
               />
+
+              {/* Live Color Palette Extractor on Hover */}
+              <div className="absolute bottom-3 left-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                <LiveColorPaletteOverlay
+                  palette={work.palette}
+                  artworkTitle={work.title}
+                />
+              </div>
             </div>
 
             {/* Content & Student Context */}
             <div className="p-6 flex flex-col justify-between flex-1 space-y-4">
               <div>
-                {/* Clean unboxed metadata */}
                 <div className="flex items-center gap-2 text-xs font-sans text-[#ece7d5]/75 mb-2">
                   <span className="text-[#a33533] font-medium">{work.tag}</span>
                   <span aria-hidden="true">·</span>
@@ -122,7 +115,8 @@ export const StudentWorkGrid: React.FC<StudentWorkGridProps> = () => {
                 )}
 
                 <div className="relative pt-1 text-xs sm:text-sm text-[#ece7d5]/90 italic font-serif leading-relaxed">
-                  <Quote className="w-4 h-4 text-[#a33533] inline mr-1 -mt-1" />"{work.quote}"
+                  <Quote className="w-4 h-4 text-[#a33533] inline mr-1 -mt-1" />
+                  "{work.quote}"
                 </div>
               </div>
             </div>
