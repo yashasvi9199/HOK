@@ -1,0 +1,55 @@
+{
+  "cardNumber": "01",
+  "cardTitle": "About us",
+  "overlayKicker": "Chapter 01 · The Atelier Manifesto",
+  "headline": "House of Kalakaar by Vrinda Haldia",
+  "subheadline": "Where tactile oil pastel heritage meets contemporary digital couture.",
+  "closeHint": "Press ESC, click Cross or Gallery to return",
+  "paragraphs": [
+    "Founded by fashion designer, digital artist, and mentor Vrinda Haldia, House of Kalakaar is an intimate creative sanctuary dedicated to preserving the raw, unpolished soul of hand-drawn artistry within the digital medium.",
+    "Every composition born in our studio begins with the philosophy of tangible pigment — the velvety drag of oil pastels across heavy cold-pressed cotton paper, the luminous warmth of drystone clay, and the rich theatrical shadow of obsidian ink.",
+    "From bespoke couture illustrations and living still-life studies to mentoring over 2,500 artists worldwide on Procreate, we celebrate slow, intentional craftsmanship that breathes emotion in every stroke."
+  ],
+  "pillars": [
+    {
+      "label": "Oil Pastel & Impasto Soul",
+      "detail": "Custom-calibrated digital pigments that honor real chalk grain and oil pastel layering."
+    },
+    {
+      "label": "Couture & Still Life",
+      "detail": "Expressive figurative silhouettes paired with timeless botanical and vessel compositions."
+    },
+    {
+      "label": "Global Art Academy",
+      "detail": "Guiding emerging illustrators across 18 countries from first sketch to signature style."
+    }
+  ],
+  "signatureNote": "Art that breathes tactile authenticity — Vrinda Haldia",
+  "collageCaption": "Layered Oil Pastel & Digital Studies · Illustrations · Compositions · Still Life",
+  "artworks": {
+    "bottomLeftRect": {
+      "title": "Draped Silk Reverie",
+      "category": "Illustration · Oil Pastel"
+    },
+    "bottomMiddleSquare": {
+      "title": "Cinder & Clay Gesture",
+      "category": "Composition · Impasto"
+    },
+    "bottomRightSquare": {
+      "title": "Terracotta Vessels",
+      "category": "Still Life · Pastel"
+    },
+    "middleLeftSquare": {
+      "title": "Chiaroscuro Muse",
+      "category": "Illustration · Portrait"
+    },
+    "middleRightRect": {
+      "title": "The Artist Table",
+      "category": "Composition · Still Life"
+    },
+    "topCenterSquare": {
+      "title": "Botanical Heirloom",
+      "category": "Still Life · Oil Pastel"
+    }
+  }
+}
