@@ -15,6 +15,8 @@ import {
   STUDIO_INSTAGRAM_URL,
   STUDIO_YOUTUBE_URL,
 } from '../../hooks/useWhatsAppRedirect';
+import { TopNavbar } from '../../components/TopNavbar';
+import { BottomNavbar } from '../../components/BottomNavbar';
 
 interface DesktopShellProps {
   children?: React.ReactNode;
@@ -41,47 +43,9 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ children }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#837d75] text-[#ece7d5] flex flex-col selection:bg-[#a33533] selection:text-[#ece7d5]">
-      {/* Editorial Desktop Header (Streamlined 3-Zone Top Bar Contract) */}
-      <header className="sticky top-0 z-40 bg-[#30292a]/95 backdrop-blur-md border-b border-[#ece7d5]/15 transition-all">
-        <div className="max-w-7xl mx-auto px-8 md:px-12 h-20 flex items-center justify-between gap-8">
-          {/* Zone 1: Brand Wordmark & Logo */}
-          <button
-            type="button"
-            onClick={() => scrollToSection('hero-section')}
-            className="group cursor-pointer shrink-0 text-left focus:outline-none"
-          >
-            <Logo variant="full" theme="dark" />
-          </button>
-
-          {/* Zone 2: 5 Clean Single-Line Navigation Links with Smooth Scroll */}
-          <nav className="flex items-center gap-8">
-            {navLinks.map((link) => (
-              <button
-                key={link.name}
-                type="button"
-                onClick={() => scrollToSection(link.targetId)}
-                className="text-sm font-sans tracking-wide text-[#ece7d5]/75 hover:text-[#ece7d5] transition-colors relative py-1.5 cursor-pointer whitespace-nowrap shrink-0 group focus:outline-none"
-              >
-                {link.name}
-                <span className="absolute bottom-0 left-0 h-[1.5px] bg-[#a33533] w-0 group-hover:w-full transition-all duration-300" />
-              </button>
-            ))}
-          </nav>
-
-          {/* Zone 3: 1 Primary Action */}
-          <div className="flex items-center shrink-0">
-            <AtelierButton
-              variant="primary"
-              size="sm"
-              icon={<MessageCircle className="w-4 h-4 text-[#ece7d5]" />}
-              onClick={() => openDirectWhatsApp()}
-            >
-              Direct WhatsApp
-            </AtelierButton>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#837d75] text-[#ece7d5] flex flex-col selection:bg-[#a33533] selection:text-[#ece7d5] pb-20">
+      {/* Fascinating Floating Frosted Top Navbar */}
+      <TopNavbar onNavigate={scrollToSection} />
 
       {/* Main Presentation Area */}
       <main className="flex-1">
@@ -260,6 +224,9 @@ export const DesktopShell: React.FC<DesktopShellProps> = ({ children }) => {
           </div>
         </div>
       </footer>
+
+      {/* Floating Tool Dock & Chapter Dial */}
+      <BottomNavbar onNavigate={scrollToSection} />
     </div>
   );
 };
