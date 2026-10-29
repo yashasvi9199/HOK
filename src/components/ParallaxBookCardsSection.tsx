@@ -2,12 +2,14 @@ import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { X, BookOpen, Lock, Sparkles } from 'lucide-react';
 import aboutData from '../data/about.json';
+import digitalMediaData from '../data/digital_media.json';
 import {
   generateOilPastelArtwork,
   generateDrippingPaintBackground,
   PastelSubject,
 } from '../utils/proceduralArtGenerator';
 import { BRAND_LOGO_URL } from '../assets/Logo';
+import { LiveColorPaletteOverlay } from './LiveColorPaletteOverlay';
 
 export type ActiveBookCardId = '01' | '02' | null;
 
@@ -15,32 +17,6 @@ interface ParallaxBookCardsSectionProps {
   activeCard: ActiveBookCardId;
   onSelectCard: (cardId: ActiveBookCardId) => void;
 }
-
-interface DigitalMediaSlide {
-  id: string;
-  title: string;
-  issue: string;
-  subject: PastelSubject;
-  customUrl?: string;
-}
-
-const TOP_ROW_SLIDES: DigitalMediaSlide[] = [
-  { id: 'dm-t1', title: 'SOLAR COUTURE DRAPE', issue: 'ISSUE 01', subject: 'illustration_drape' },
-  { id: 'dm-t2', title: 'VELVET NOCTURNE STUDY', issue: 'ISSUE 02', subject: 'digital_velvet_4' },
-  { id: 'dm-t3', title: 'CRIMSON SILK & OCHRE', issue: 'ISSUE 03', subject: 'digital_couture_2' },
-  { id: 'dm-t4', title: 'HERITAGE ZARDOZI ARCHIVE', issue: 'ISSUE 04', subject: 'digital_heritage_5' },
-  { id: 'dm-t5', title: 'PASTEL IMPASTO CROQUIS', issue: 'ISSUE 05', subject: 'composition_abstract' },
-  { id: 'dm-t6', title: 'ATELIER VESSELS & LINEN', issue: 'ISSUE 06', subject: 'stilllife_vessels' },
-];
-
-const BOTTOM_ROW_SLIDES: DigitalMediaSlide[] = [
-  { id: 'dm-b1', title: 'CHIAROSCURO GAZE', issue: 'VOL. I', subject: 'illustration_portrait' },
-  { id: 'dm-b2', title: 'ROYAL BOTANICAL CROWN', issue: 'VOL. II', subject: 'stilllife_botanical' },
-  { id: 'dm-b3', title: 'THE ARTIST TABLE STUDY', issue: 'VOL. III', subject: 'composition_atelier' },
-  { id: 'dm-b4', title: 'GILDED BANARASI WEAVE', issue: 'VOL. IV', subject: 'digital_couture_1' },
-  { id: 'dm-b5', title: 'EDITORIAL MONOGRAPH', issue: 'VOL. V', subject: 'digital_editorial_3' },
-  { id: 'dm-b6', title: 'LUMINOUS GLAZE PORTRAIT', issue: 'VOL. VI', subject: 'digital_glaze_6' },
-];
 
 export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> = ({
   activeCard,
@@ -87,7 +63,7 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
         digital_couture_1: generateOilPastelArtwork('digital_couture_1', 760, 520),
         digital_editorial_3: generateOilPastelArtwork('digital_editorial_3', 760, 520),
         digital_glaze_6: generateOilPastelArtwork('digital_glaze_6', 760, 520),
-      } as Record<PastelSubject, string>,
+      } as Record<string, string>,
     };
   }, []);
 
@@ -137,7 +113,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
     }, 80);
   };
 
-  // Repeat marquee text for seamless right-to-left loop
   const marqueeItems = Array.from({ length: 14 }, (_, i) => i);
 
   return (
@@ -146,7 +121,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
       ref={sectionRef}
       className="relative py-24 md:py-32 bg-[#837d75] text-[#ece7d5] overflow-hidden border-b border-[#30292a]/40"
     >
-      {/* Subtle Architectural Grid Lines */}
       <div className="max-w-7xl mx-auto px-6 sm:px-10 md:px-12 relative z-10">
         {/* Section Heading with Scroll Animation */}
         <motion.div
@@ -158,9 +132,9 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
         >
           <div>
             <div className="flex items-center gap-2 text-xs font-sans tracking-[0.25em] uppercase text-[#ece7d5]/80 mb-3">
-              <span>Interactive Atelier Volumes</span>
+              <span>The Gallery Checkpoint</span>
               <span aria-hidden="true">·</span>
-              <span>Select a Volume to Open</span>
+              <span>Select an Atelier Volume to Unfold</span>
             </div>
             <h2
               className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal text-[#ece7d5] tracking-tight"
@@ -170,7 +144,7 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
             </h2>
           </div>
           <p className="font-sans text-sm sm:text-base text-[#ece7d5]/85 max-w-md leading-relaxed">
-            Each card is bound like an artist monograph. Click Volume 01 or Volume 02 to unfold its cover in 3D space and immerse yourself in the full-screen folio.
+            The core gallery experience of our atelier. Click Volume 01 or Volume 02 to unfold its cover in 3D space and immerse yourself in the full-screen folio.
           </p>
         </motion.div>
 
@@ -184,7 +158,7 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
               className="mb-8 p-4 bg-[#30292a] border border-[#a33533] text-[#ece7d5] flex items-center justify-between text-xs sm:text-sm font-sans shadow-xl"
             >
               <div className="flex items-center gap-3">
-                <Sparkles className="w-4 h-4 text-[#a33533] shrink-0" />
+                <Sparkles className="w-4 h-4 text-[#a33533]" />
                 <span>{comingSoonToast}</span>
               </div>
               <button
@@ -200,7 +174,7 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
 
         {/* 4 PARALLAX CARDS GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 perspective-book">
-          {/* CARD 01: '01 About us' — Solid #806055 with Splash Tropical Font in #ffffff */}
+          {/* CARD 01: '01 About us' */}
           <motion.div
             style={{ y: yCard1 }}
             initial={{ opacity: 0, y: 50 }}
@@ -220,11 +194,9 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
               className="group relative h-[380px] sm:h-[430px] w-full bg-[#806055] border-2 border-[#ece7d5]/30 shadow-[0_24px_60px_rgba(48,41,42,0.5)] cursor-pointer overflow-hidden flex flex-col justify-between p-8 sm:p-10 preserve-3d book-spine-origin select-none"
             >
-              {/* Book Spine Crease on Left Edge */}
               <div className="absolute top-0 bottom-0 left-0 w-4 bg-gradient-to-r from-[#30292a]/60 via-[#ece7d5]/15 to-transparent pointer-events-none" />
               <div className="absolute top-3 bottom-3 right-2 w-1.5 border-r border-y border-[#ffffff]/30 pointer-events-none" />
 
-              {/* Top Header Row */}
               <div className="flex items-center justify-between z-10">
                 <span className="font-splash text-2xl sm:text-3xl text-[#ffffff] tracking-wider">
                   01
@@ -235,7 +207,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                 </span>
               </div>
 
-              {/* Center/Bottom Label in Splash Tropical Font #ffffff */}
               <div className="my-auto py-6 text-center z-10">
                 <h3 className="font-splash text-5xl sm:text-6xl lg:text-7xl text-[#ffffff] drop-shadow-[0_4px_16px_rgba(48,41,42,0.35)] group-hover:scale-105 transition-transform duration-500">
                   01 About us
@@ -245,7 +216,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                 </p>
               </div>
 
-              {/* Bottom Footer */}
               <div className="flex items-center justify-between text-xs font-splash text-[#ffffff]/80 border-t border-[#ffffff]/25 pt-4 z-10">
                 <span>Solid Drystone Clay Edition</span>
                 <span className="group-hover:translate-x-1 transition-transform">
@@ -255,7 +225,7 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
             </motion.div>
           </motion.div>
 
-          {/* CARD 02: '02 Digital Media' — Dripping Paint Background + Afrocultures Font */}
+          {/* CARD 02: '02 Digital Media' */}
           <motion.div
             style={{ y: yCard2 }}
             initial={{ opacity: 0, y: 65 }}
@@ -275,7 +245,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
               className="group relative h-[380px] sm:h-[430px] w-full bg-[#30292a] border-2 border-[#ece7d5]/30 shadow-[0_24px_60px_rgba(48,41,42,0.55)] cursor-pointer overflow-hidden flex flex-col justify-between p-8 sm:p-10 preserve-3d book-spine-origin select-none"
             >
-              {/* Dripping Paint Image Background */}
               {artworks.drippingBg && (
                 <img
                   src={artworks.drippingBg}
@@ -285,14 +254,9 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                 />
               )}
 
-              {/* Contrast Scrim for Legibility */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#30292a]/95 via-[#30292a]/55 to-[#30292a]/30 pointer-events-none" />
-
-              {/* Book Spine Crease */}
               <div className="absolute top-0 bottom-0 left-0 w-4 bg-gradient-to-r from-black/80 via-white/10 to-transparent pointer-events-none z-10" />
-              <div className="absolute top-3 bottom-3 right-2 w-1.5 border-r border-y border-[#ece7d5]/30 pointer-events-none z-10" />
 
-              {/* Top Header Row */}
               <div className="relative z-10 flex items-center justify-between">
                 <span className="font-afrocultures text-xl sm:text-2xl font-extrabold text-[#ece7d5] bg-[#a33533] px-3 py-1">
                   02
@@ -303,7 +267,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                 </span>
               </div>
 
-              {/* Center Title in Afrocultures Font */}
               <div className="relative z-10 my-auto py-6 text-center">
                 <h3 className="font-afrocultures text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#ece7d5] tracking-wider drop-shadow-[0_6px_20px_rgba(0,0,0,0.85)] group-hover:scale-105 transition-transform duration-500">
                   02 Digital Media
@@ -313,7 +276,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                 </p>
               </div>
 
-              {/* Bottom Footer */}
               <div className="relative z-10 flex items-center justify-between text-xs font-afrocultures text-[#ece7d5]/85 border-t border-[#ece7d5]/25 pt-4">
                 <span>Dripping Pigment Edition</span>
                 <span className="text-[#a33533] font-bold group-hover:translate-x-1 transition-transform">
@@ -323,7 +285,7 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
             </motion.div>
           </motion.div>
 
-          {/* CARD 03: '03 illustration' — Obsidian Veil & Cindered Red (Coming Soon) */}
+          {/* CARD 03: '03 illustration' */}
           <motion.div
             style={{ y: yCard3 }}
             initial={{ opacity: 0, y: 50 }}
@@ -338,9 +300,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
               transition={{ duration: 0.35 }}
               className="group relative h-[360px] sm:h-[400px] w-full bg-[#30292a] border-2 border-[#a33533]/60 shadow-[0_24px_60px_rgba(48,41,42,0.5)] cursor-pointer overflow-hidden flex flex-col justify-between p-8 sm:p-10 preserve-3d book-spine-origin select-none"
             >
-              {/* Book Spine Crease */}
-              <div className="absolute top-0 bottom-0 left-0 w-4 bg-gradient-to-r from-black/70 via-[#a33533]/20 to-transparent pointer-events-none" />
-
               <div className="flex items-center justify-between z-10">
                 <span className="font-serif text-2xl sm:text-3xl text-[#a33533] font-semibold">
                   03
@@ -367,7 +326,7 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
             </motion.div>
           </motion.div>
 
-          {/* CARD 04: '04 design process' — Smoke Whisper #ece7d5 & Obsidian #30292a (Coming Soon) */}
+          {/* CARD 04: '04 design process' */}
           <motion.div
             style={{ y: yCard4 }}
             initial={{ opacity: 0, y: 65 }}
@@ -382,9 +341,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
               transition={{ duration: 0.35 }}
               className="group relative h-[360px] sm:h-[400px] w-full bg-[#ece7d5] text-[#30292a] border-2 border-[#30292a]/30 shadow-[0_24px_60px_rgba(48,41,42,0.45)] cursor-pointer overflow-hidden flex flex-col justify-between p-8 sm:p-10 preserve-3d book-spine-origin select-none"
             >
-              {/* Book Spine Crease */}
-              <div className="absolute top-0 bottom-0 left-0 w-4 bg-gradient-to-r from-[#30292a]/35 via-[#806055]/15 to-transparent pointer-events-none" />
-
               <div className="flex items-center justify-between z-10">
                 <span className="font-serif text-2xl sm:text-3xl text-[#806055] font-semibold">
                   04
@@ -413,9 +369,7 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
         </div>
       </div>
 
-      {/* =====================================================================
-          FULL-SCREEN 3D BOOK OVERLAYS (Section 2.01 About us & Section 2.02 Digital Media)
-      ===================================================================== */}
+      {/* FULL-SCREEN 3D BOOK OVERLAYS */}
       <AnimatePresence>
         {activeCard === '01' && (
           <motion.div
@@ -427,10 +381,8 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
             style={{ transformOrigin: 'left center' }}
             className="fixed inset-0 z-50 w-screen h-screen bg-[#806055] text-[#ffffff] overflow-y-auto overflow-x-hidden flex flex-col justify-between font-splash shadow-2xl"
           >
-            {/* Book Spine Shadow on Left Edge */}
             <div className="fixed top-0 bottom-0 left-0 w-6 bg-gradient-to-r from-[#30292a]/70 to-transparent pointer-events-none z-30" />
 
-            {/* Top Navigation Bar inside Overlay (Supports 'Gallery' option + Top-Right Cross '✕' + ESC) */}
             <header className="sticky top-0 z-40 flex items-center justify-between px-6 sm:px-10 py-4 bg-[#806055]/95 backdrop-blur-md border-b border-[#ffffff]/20">
               <div className="flex items-center gap-3">
                 <img
@@ -445,7 +397,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
               </div>
 
               <div className="flex items-center gap-4 sm:gap-6">
-                {/* Top Nav Bar option 'Gallery' to return to 4 cards section */}
                 <button
                   type="button"
                   onClick={handleCloseOverlay}
@@ -458,7 +409,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                   {aboutData.closeHint}
                 </span>
 
-                {/* Top-Right Cross (✕) */}
                 <button
                   type="button"
                   onClick={handleCloseOverlay}
@@ -470,15 +420,13 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
               </div>
             </header>
 
-            {/* Main Content & Bottom-Right 6-Image Uneven Layered Stack */}
             <div className="relative flex-1 max-w-[1440px] w-full mx-auto px-6 sm:px-10 md:px-14 pt-8 pb-12 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10">
-              {/* Left Narrative Column (All text loaded from src/data/about.json in Splash Tropical Font) */}
               <div className="w-full lg:w-[48%] space-y-6 my-auto z-10">
                 <div className="text-lg sm:text-xl text-[#ece7d5] tracking-wider">
                   {aboutData.overlayKicker}
                 </div>
 
-                <h1 className="font-splash text-4xl sm:text-6xl lg:text-7xl text-[#ffffff] leading-[1.12] drop-shadow-sm">
+                <h1 className="font-splash text-4xl sm:text-6xl lg:text-7xl text-[#ffffff] leading-[1.12]">
                   {aboutData.headline}
                 </h1>
 
@@ -494,7 +442,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                   ))}
                 </div>
 
-                {/* 3 Studio Pillars from about.json */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-[#ffffff]/25">
                   {aboutData.pillars.map((pillar, index) => (
                     <div
@@ -516,15 +463,14 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                 </div>
               </div>
 
-              {/* Right / Bottom-Right Corner: 6 Images Stacked Unevenly in 3 Layers with 1.5px Padding */}
+              {/* 6 Images Stacked Unevenly on Bottom-Right Corner in Layers with 1.5px padding */}
               <div className="w-full lg:w-[50%] flex flex-col items-end justify-end self-end z-10 mt-6 lg:mt-0">
                 <div className="mb-2 text-right font-splash text-sm sm:text-base text-[#ece7d5]/90">
                   {aboutData.collageCaption}
                 </div>
 
-                {/* Uneven Layered Stack Container with exact 1.5px padding between all images */}
                 <div className="flex flex-col gap-[1.5px] bg-[#30292a]/40 p-[1.5px] shadow-[0_24px_60px_rgba(48,41,42,0.55)] ml-auto">
-                  {/* LAYER 3 (Top Row): 1 Square in center of arrangement */}
+                  {/* LAYER 3: 1 Square in Center */}
                   <div className="flex justify-center w-full">
                     <div className="relative w-[105px] h-[105px] sm:w-[142px] sm:h-[142px] md:w-[158px] md:h-[158px] overflow-hidden bg-[#30292a] group">
                       <img
@@ -533,20 +479,16 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#30292a]/90 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="font-splash text-xs text-[#ffffff] leading-none">
-                          {aboutData.artworks.topCenterSquare.title}
-                        </div>
-                        <div className="font-splash text-[10px] text-[#ece7d5]/80">
-                          {aboutData.artworks.topCenterSquare.category}
-                        </div>
+                      <div className="absolute inset-x-0 bottom-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <LiveColorPaletteOverlay
+                          palette={['#ece7d5', '#a33533', '#30292a', '#806055']}
+                        />
                       </div>
                     </div>
                   </div>
 
-                  {/* LAYER 2 (Middle Row): 2 images above bottom row (Square, Rectangle) from left to right */}
+                  {/* LAYER 2: 2 Images Above Bottom (Square, Rectangle) */}
                   <div className="flex items-end justify-center gap-[1.5px] ml-4 sm:ml-8">
-                    {/* Square (Left) */}
                     <div className="relative w-[105px] h-[105px] sm:w-[142px] sm:h-[142px] md:w-[158px] md:h-[158px] overflow-hidden bg-[#30292a] group shrink-0">
                       <img
                         src={artworks.middleLeftSquare}
@@ -554,17 +496,13 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#30292a]/90 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="font-splash text-xs text-[#ffffff] leading-none">
-                          {aboutData.artworks.middleLeftSquare.title}
-                        </div>
-                        <div className="font-splash text-[10px] text-[#ece7d5]/80">
-                          {aboutData.artworks.middleLeftSquare.category}
-                        </div>
+                      <div className="absolute inset-x-0 bottom-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <LiveColorPaletteOverlay
+                          palette={['#30292a', '#806055', '#ece7d5', '#a33533']}
+                        />
                       </div>
                     </div>
 
-                    {/* Rectangle (Right) */}
                     <div className="relative w-[148px] h-[105px] sm:w-[205px] sm:h-[142px] md:w-[228px] md:h-[158px] overflow-hidden bg-[#30292a] group shrink-0">
                       <img
                         src={artworks.middleRightRect}
@@ -572,20 +510,16 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#30292a]/90 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="font-splash text-xs text-[#ffffff] leading-none">
-                          {aboutData.artworks.middleRightRect.title}
-                        </div>
-                        <div className="font-splash text-[10px] text-[#ece7d5]/80">
-                          {aboutData.artworks.middleRightRect.category}
-                        </div>
+                      <div className="absolute inset-x-0 bottom-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <LiveColorPaletteOverlay
+                          palette={['#806055', '#ece7d5', '#d4b483', '#30292a']}
+                        />
                       </div>
                     </div>
                   </div>
 
-                  {/* LAYER 1 (Bottom Row): 3 images at bottom (Rectangle, Square, Square) from left to right */}
+                  {/* LAYER 1: 3 Images at Bottom (Rectangle, Square, Square) */}
                   <div className="flex items-end justify-end gap-[1.5px]">
-                    {/* Rectangle (Left) */}
                     <div className="relative w-[148px] h-[105px] sm:w-[205px] sm:h-[142px] md:w-[228px] md:h-[158px] overflow-hidden bg-[#30292a] group shrink-0">
                       <img
                         src={artworks.bottomLeftRect}
@@ -593,17 +527,13 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#30292a]/90 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="font-splash text-xs text-[#ffffff] leading-none">
-                          {aboutData.artworks.bottomLeftRect.title}
-                        </div>
-                        <div className="font-splash text-[10px] text-[#ece7d5]/80">
-                          {aboutData.artworks.bottomLeftRect.category}
-                        </div>
+                      <div className="absolute inset-x-0 bottom-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <LiveColorPaletteOverlay
+                          palette={['#ece7d5', '#a33533', '#806055', '#30292a']}
+                        />
                       </div>
                     </div>
 
-                    {/* Square (Middle) */}
                     <div className="relative w-[105px] h-[105px] sm:w-[142px] sm:h-[142px] md:w-[158px] md:h-[158px] overflow-hidden bg-[#30292a] group shrink-0">
                       <img
                         src={artworks.bottomMiddleSquare}
@@ -611,17 +541,13 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#30292a]/90 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="font-splash text-xs text-[#ffffff] leading-none">
-                          {aboutData.artworks.bottomMiddleSquare.title}
-                        </div>
-                        <div className="font-splash text-[10px] text-[#ece7d5]/80">
-                          {aboutData.artworks.bottomMiddleSquare.category}
-                        </div>
+                      <div className="absolute inset-x-0 bottom-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <LiveColorPaletteOverlay
+                          palette={['#837d75', '#ece7d5', '#806055', '#a33533']}
+                        />
                       </div>
                     </div>
 
-                    {/* Square (Right) */}
                     <div className="relative w-[105px] h-[105px] sm:w-[142px] sm:h-[142px] md:w-[158px] md:h-[158px] overflow-hidden bg-[#30292a] group shrink-0">
                       <img
                         src={artworks.bottomRightSquare}
@@ -629,13 +555,10 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#30292a]/90 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="font-splash text-xs text-[#ffffff] leading-none">
-                          {aboutData.artworks.bottomRightSquare.title}
-                        </div>
-                        <div className="font-splash text-[10px] text-[#ece7d5]/80">
-                          {aboutData.artworks.bottomRightSquare.category}
-                        </div>
+                      <div className="absolute inset-x-0 bottom-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <LiveColorPaletteOverlay
+                          palette={['#806055', '#ece7d5', '#30292a', '#d4b483']}
+                        />
                       </div>
                     </div>
                   </div>
@@ -645,10 +568,7 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
           </motion.div>
         )}
 
-        {/* ===================================================================
-            OVERLAY 2.02: DIGITAL MEDIA (Afrocultures Font, Broad Black Borders,
-            Thin Red Center Strips with R->L Marquee, Two Thick Counter-Moving Rows)
-        =================================================================== */}
+        {/* OVERLAY 2.02: DIGITAL MEDIA (Powered by src/data/digital_media.json) */}
         {activeCard === '02' && (
           <motion.div
             key="overlay-02-digital-media"
@@ -659,7 +579,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
             style={{ transformOrigin: 'left center' }}
             className="fixed inset-0 z-50 w-screen h-screen bg-[#30292a] text-[#ece7d5] overflow-y-auto overflow-x-hidden flex flex-col justify-between font-afrocultures select-none"
           >
-            {/* Dripping Paint Ambient Backdrop at Low Opacity */}
             {artworks.drippingBg && (
               <img
                 src={artworks.drippingBg}
@@ -669,7 +588,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
               />
             )}
 
-            {/* Top Navigation Bar inside Digital Media Overlay (Gallery + ESC + Cross '✕') */}
             <header className="relative z-40 flex items-center justify-between px-6 sm:px-10 py-3.5 bg-[#120f10] border-b border-[#ece7d5]/15">
               <div className="flex items-center gap-3">
                 <img
@@ -679,12 +597,11 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                   referrerPolicy="no-referrer"
                 />
                 <span className="font-afrocultures text-base sm:text-xl font-bold text-[#ece7d5]">
-                  02 · DIGITAL MEDIA
+                  {digitalMediaData.sectionTitle}
                 </span>
               </div>
 
               <div className="flex items-center gap-4 sm:gap-6">
-                {/* Top nav bar option 'Gallery' to return to 4 cards section */}
                 <button
                   type="button"
                   onClick={handleCloseOverlay}
@@ -693,11 +610,6 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                   GALLERY
                 </button>
 
-                <span className="hidden md:inline text-xs font-afrocultures text-[#ece7d5]/60">
-                  ESC OR CROSS TO EXIT
-                </span>
-
-                {/* Top-Right Cross (✕) */}
                 <button
                   type="button"
                   onClick={handleCloseOverlay}
@@ -709,9 +621,8 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
               </div>
             </header>
 
-            {/* Main Carousel Viewport Framed by Broad Top & Bottom Black Borders */}
             <div className="relative z-20 flex-1 flex flex-col justify-between my-auto">
-              {/* TOP BROAD BLACK BORDER with Thin Red Strip Justified Center (Marquee R -> L) */}
+              {/* TOP BROAD BLACK BORDER with Centered Red Marquee Strip */}
               <div className="w-full bg-[#090808] py-5 sm:py-7 flex items-center justify-center border-y-2 border-[#30292a] shadow-xl">
                 <div className="w-full bg-[#a33533] py-1.5 overflow-hidden flex items-center">
                   <div className="animate-marquee-rtl whitespace-nowrap flex items-center">
@@ -720,27 +631,25 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                         key={`top-m-${idx}`}
                         className="font-afrocultures text-xs sm:text-sm font-extrabold text-[#ece7d5] tracking-[0.22em] mx-4"
                       >
-                        LOGBOOK MAGAZINE ART | LOGBOOK MAGAZINE ART |
+                        {digitalMediaData.marqueeText}{' '}
                       </span>
                     ))}
                   </div>
                 </div>
               </div>
 
-              {/* TWO THICK ROWS OF IMAGES IN CAROUSEL MOTION */}
+              {/* TWO THICK ROWS OF IMAGES (Auto-Crop & Zoom Normalized) */}
               <div className="flex-1 flex flex-col justify-center gap-6 sm:gap-8 py-6 bg-[#1c1819]/90 overflow-hidden">
-                {/* TOP THICK ROW: Moving Right to Left (R -> L) */}
+                {/* TOP THICK ROW: Moving Right to Left */}
                 <div className="w-full overflow-hidden">
                   <div className="animate-carousel-rtl flex items-center gap-5 sm:gap-6 px-3">
-                    {[...TOP_ROW_SLIDES, ...TOP_ROW_SLIDES].map((slide, idx) => {
-                      const imgSrc =
-                        slide.customUrl || artworks.digitalMediaMap[slide.subject];
+                    {[...digitalMediaData.topRow, ...digitalMediaData.topRow].map((slide, idx) => {
+                      const imgSrc = artworks.digitalMediaMap[slide.subject];
                       return (
                         <div
                           key={`${slide.id}-${idx}`}
                           className="relative w-[270px] h-[195px] sm:w-[360px] sm:h-[250px] lg:w-[410px] lg:h-[275px] shrink-0 overflow-hidden bg-[#30292a] border-2 border-[#ece7d5]/25 group shadow-2xl"
                         >
-                          {/* Uniform Single-Size Auto-Zoom & Crop Image */}
                           <img
                             src={imgSrc}
                             alt={slide.title}
@@ -755,24 +664,26 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                               {slide.title}
                             </h4>
                           </div>
+                          {/* Live Palette Extractor on Hover */}
+                          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                            <LiveColorPaletteOverlay palette={slide.palette} />
+                          </div>
                         </div>
                       );
                     })}
                   </div>
                 </div>
 
-                {/* BOTTOM THICK ROW: Moving Left to Right (L -> R) */}
+                {/* BOTTOM THICK ROW: Moving Left to Right */}
                 <div className="w-full overflow-hidden">
                   <div className="animate-carousel-ltr flex items-center gap-5 sm:gap-6 px-3">
-                    {[...BOTTOM_ROW_SLIDES, ...BOTTOM_ROW_SLIDES].map((slide, idx) => {
-                      const imgSrc =
-                        slide.customUrl || artworks.digitalMediaMap[slide.subject];
+                    {[...digitalMediaData.bottomRow, ...digitalMediaData.bottomRow].map((slide, idx) => {
+                      const imgSrc = artworks.digitalMediaMap[slide.subject];
                       return (
                         <div
                           key={`${slide.id}-${idx}`}
                           className="relative w-[270px] h-[195px] sm:w-[360px] sm:h-[250px] lg:w-[410px] lg:h-[275px] shrink-0 overflow-hidden bg-[#30292a] border-2 border-[#ece7d5]/25 group shadow-2xl"
                         >
-                          {/* Uniform Single-Size Auto-Zoom & Crop Image */}
                           <img
                             src={imgSrc}
                             alt={slide.title}
@@ -786,6 +697,10 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                             <h4 className="font-afrocultures text-sm sm:text-base text-[#ece7d5] font-bold truncate">
                               {slide.title}
                             </h4>
+                          </div>
+                          {/* Live Palette Extractor on Hover */}
+                          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                            <LiveColorPaletteOverlay palette={slide.palette} />
                           </div>
                         </div>
                       );
@@ -794,7 +709,7 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                 </div>
               </div>
 
-              {/* BOTTOM BROAD BLACK BORDER with Thin Red Strip Justified Center (Marquee R -> L) */}
+              {/* BOTTOM BROAD BLACK BORDER with Centered Red Marquee Strip */}
               <div className="w-full bg-[#090808] py-5 sm:py-7 flex items-center justify-center border-y-2 border-[#30292a] shadow-xl">
                 <div className="w-full bg-[#a33533] py-1.5 overflow-hidden flex items-center">
                   <div className="animate-marquee-rtl whitespace-nowrap flex items-center">
@@ -803,7 +718,7 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
                         key={`bot-m-${idx}`}
                         className="font-afrocultures text-xs sm:text-sm font-extrabold text-[#ece7d5] tracking-[0.22em] mx-4"
                       >
-                        LOGBOOK MAGAZINE ART | LOGBOOK MAGAZINE ART |
+                        {digitalMediaData.marqueeText}{' '}
                       </span>
                     ))}
                   </div>
