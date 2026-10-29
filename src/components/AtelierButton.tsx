@@ -24,20 +24,20 @@ export const AtelierButton: React.FC<AtelierButtonProps> = ({
 
   const variantClasses = {
     primary:
-      'bg-[#1C1917] text-[#FAF7F2] hover:bg-[#292524] border border-[#1C1917] shadow-xs active:scale-[0.99]',
+      'bg-[#a33533] text-[#ece7d5] hover:bg-[#30292a] border border-[#a33533] hover:border-[#ece7d5]/40 shadow-xs active:scale-[0.99]',
     secondary:
-      'bg-[#C5A059] text-white hover:bg-[#B38F48] border border-[#C5A059] shadow-xs active:scale-[0.99]',
+      'bg-[#806055] text-[#ece7d5] hover:bg-[#30292a] border border-[#ece7d5]/30 shadow-xs active:scale-[0.99]',
     outline:
-      'bg-transparent text-[#1C1917] border border-[#1C1917]/25 hover:border-[#1C1917] hover:bg-[#FAF7F2] active:scale-[0.99]',
+      'bg-transparent text-[#ece7d5] border border-[#ece7d5]/35 hover:border-[#ece7d5] hover:bg-[#30292a]/60 active:scale-[0.99]',
     whatsapp:
-      'bg-[#128C7E] text-white hover:bg-[#075E54] border border-[#128C7E] shadow-xs active:scale-[0.99]',
+      'bg-[#a33533] text-[#ece7d5] hover:bg-[#30292a] border border-[#ece7d5]/30 shadow-xs active:scale-[0.99]',
     ghost:
-      'bg-transparent text-[#1C1917] hover:text-[#C5A059] hover:bg-[#FAF7F2]/60',
+      'bg-transparent text-[#ece7d5] hover:text-[#a33533] hover:bg-[#30292a]/40',
   }[variant];
 
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 font-medium tracking-wide transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed select-none rounded-none ${sizeClasses} ${variantClasses} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 font-medium tracking-wide transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed select-none rounded-none whitespace-nowrap shrink-0 ${sizeClasses} ${variantClasses} ${className}`}
       disabled={disabled}
       {...props}
     >
