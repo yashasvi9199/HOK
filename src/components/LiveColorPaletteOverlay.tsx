@@ -10,13 +10,13 @@ interface LiveColorPaletteOverlayProps {
 }
 
 const COLOR_NAMES: Record<string, string> = {
-  '#ece7d5': 'Smoke Whisper',
-  '#837d75': 'Weathered Steel',
-  '#806055': 'Drystone Clay',
-  '#a33533': 'Cindered Red',
-  '#30292a': 'Obsidian Veil',
-  '#d4b483': 'Antique Studio Gold',
-  '#ffffff': 'Pure Alabaster',
+  '#ece7d5': 'Smoke Whisper · Primary',
+  '#837d75': 'Weathered Steel · Background',
+  '#806055': 'Drystone Clay · Secondary',
+  '#a33533': 'Cindered Red · Highlight',
+  '#30292a': 'Obsidian Veil · Other',
+  '#d4b483': 'Studio Gold',
+  '#ffffff': 'Alabaster White',
   '#241e1f': 'Deep Ink Carbon',
   '#c97b63': 'Terracotta Ochre',
   '#6e2322': 'Crimson Silk',
