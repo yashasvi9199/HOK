@@ -1,18 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, MessageCircle, Sparkles, ArrowRight, Instagram, Youtube, Award, Brush, Compass, ChevronRight } from 'lucide-react';
+import {
+  Menu,
+  X,
+  MessageCircle,
+  Sparkles,
+  Instagram,
+  Youtube,
+  Award,
+  Compass,
+  ChevronRight,
+} from 'lucide-react';
 import { Logo } from '../../assets/Logo';
 import { AtelierButton } from '../../components/AtelierButton';
+import { HeroWalkGpuSection } from '../../components/HeroWalkGpuSection';
+import {
+  ParallaxBookCardsSection,
+  ActiveBookCardId,
+} from '../../components/ParallaxBookCardsSection';
 import { ArtworkCarousel } from '../../components/ArtworkCarousel';
 import { StudentWorkGrid } from '../../components/StudentWorkGrid';
 import { TestimonialCards } from '../../components/TestimonialCards';
 import { LeadCaptureForm } from '../../components/LeadCaptureForm';
 import { ArtworkModal } from '../../components/ArtworkModal';
 import { SectionWrapper } from '../../components/SectionWrapper';
-import { CookieBanner } from '../../components/CookieBanner';
-import { Skiper19 } from '../../components/Skiper19';
-import { useWhatsAppRedirect, STUDIO_INSTAGRAM_URL, STUDIO_YOUTUBE_URL } from '../../hooks/useWhatsAppRedirect';
+import {
+  useWhatsAppRedirect,
+  STUDIO_INSTAGRAM_URL,
+  STUDIO_YOUTUBE_URL,
+} from '../../hooks/useWhatsAppRedirect';
 import { Artwork } from '../../types';
+import { generateOilPastelArtwork } from '../../utils/proceduralArtGenerator';
 
 interface MobileShellProps {
   children?: React.ReactNode;
@@ -24,55 +42,81 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
   const { openDirectWhatsApp } = useWhatsAppRedirect();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
+  const [activeBookCard, setActiveBookCard] = useState<ActiveBookCardId>(null);
 
   const isHome = location.pathname === '/';
 
+  const artistPortraitUrl = useMemo(
+    () => generateOilPastelArtwork('illustration_portrait', 640, 800),
+    []
+  );
+
   const navLinks = [
     { name: 'The Atelier', path: '/' },
-    { name: 'Artwork Gallery', path: '/gallery' },
-    { name: 'Scroll Effect (@skiper-ui)', path: '/scroll-effect' },
+    { name: 'Gallery', path: '/gallery', isGalleryOption: true },
     { name: 'Guidance & FAQ', path: '/faq' },
     { name: 'Contact & Studio', path: '/contact' },
-    { name: 'Terms & Conditions', path: '/terms' },
-    { name: 'DPDP Privacy Notice', path: '/privacy' },
   ];
 
-  const handleNavClick = (path: string) => {
+  const handleNavClick = (path: string, isGalleryOption?: boolean) => {
     setIsDrawerOpen(false);
+    if (isGalleryOption && activeBookCard !== null) {
+      setActiveBookCard(null);
+      setTimeout(() => {
+        document.getElementById('parallax-cards-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 80);
+      return;
+    }
+    setActiveBookCard(null);
     navigate(path);
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1C1917] flex flex-col pb-20 selection:bg-[#C5A059]/20 selection:text-[#1C1917]">
+    <div className="min-h-screen bg-[#837d75] text-[#ece7d5] flex flex-col pb-16 selection:bg-[#a33533] selection:text-[#ece7d5]">
       <ArtworkModal artwork={selectedArtwork} onClose={() => setSelectedArtwork(null)} />
 
-      {/* Top Mobile Notice Strip */}
-      <div className="bg-[#1C1917] text-[#FAF7F2] py-1.5 px-4 text-center text-[10px] font-sans tracking-widest uppercase border-b border-[#C5A059]/30 flex items-center justify-center gap-2">
-        <span className="text-[#C5A059]">✦</span>
-        <span>Cohort 17 Enrolling • 20 Atelier Seats Only</span>
-        <span className="text-[#C5A059]">✦</span>
-      </div>
-
       {/* Mobile Sticky Editorial Header */}
-      <header className="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#F0ECE1] px-4 py-3 flex items-center justify-between shadow-xs">
-        {/* Logo */}
-        <Link to="/" className="cursor-pointer" onClick={() => setIsDrawerOpen(false)}>
-          <Logo variant="compact" />
+      <header className="sticky top-0 z-40 bg-[#30292a]/95 backdrop-blur-md border-b border-[#ece7d5]/15 px-4 py-2.5 flex items-center justify-between shadow-md">
+        <Link
+          to="/"
+          className="cursor-pointer"
+          onClick={() => {
+            setIsDrawerOpen(false);
+            setActiveBookCard(null);
+          }}
+        >
+          <Logo variant="compact" theme="dark" />
         </Link>
 
-        {/* Right Actions: Quick WhatsApp + Hamburger */}
+        {/* Right Actions: Quick Gallery Return + WhatsApp + Hamburger */}
         <div className="flex items-center gap-2">
+          {activeBookCard !== null && (
+            <button
+              type="button"
+              onClick={() => setActiveBookCard(null)}
+              className="px-2.5 py-1 text-xs font-sans bg-[#a33533] text-[#ece7d5] border border-[#ece7d5]/30 cursor-pointer"
+            >
+              Gallery
+            </button>
+          )}
+
           <button
-            onClick={() => openDirectWhatsApp('Hello Vrinda, I am inquiring from the House of Kalakaar mobile portal.')}
-            className="w-9 h-9 rounded-full bg-[#128C7E] text-white flex items-center justify-center shadow-xs cursor-pointer active:scale-95 transition-transform"
+            type="button"
+            onClick={() =>
+              openDirectWhatsApp(
+                'Hello Vrinda, I am inquiring from the House of Kalakaar mobile portal.'
+              )
+            }
+            className="w-9 h-9 bg-[#a33533] text-[#ece7d5] flex items-center justify-center shadow-xs cursor-pointer active:scale-95 transition-transform"
             aria-label="Direct WhatsApp"
           >
             <MessageCircle className="w-4 h-4" />
           </button>
 
           <button
+            type="button"
             onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-            className="w-9 h-9 border border-[#1C1917]/20 flex items-center justify-center text-[#1C1917] cursor-pointer active:scale-95 transition-transform"
+            className="w-9 h-9 border border-[#ece7d5]/25 flex items-center justify-center text-[#ece7d5] cursor-pointer active:scale-95 transition-transform"
             aria-label="Toggle Navigation Drawer"
           >
             {isDrawerOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -82,21 +126,22 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
 
       {/* Mobile Slide-Out Drawer */}
       {isDrawerOpen && (
-        <div className="fixed inset-0 top-[88px] z-50 bg-[#1C1917]/70 backdrop-blur-xs flex flex-col">
-          <div className="bg-[#FAF7F2] border-b border-[#C5A059]/40 p-6 flex flex-col space-y-5 shadow-2xl animate-in slide-in-from-top duration-300">
-            <nav className="flex flex-col space-y-1 divide-y divide-[#F0ECE1]">
+        <div className="fixed inset-0 top-[64px] z-50 bg-[#30292a]/80 backdrop-blur-xs flex flex-col">
+          <div className="bg-[#30292a] border-b border-[#a33533] p-6 flex flex-col space-y-5 shadow-2xl">
+            <nav className="flex flex-col space-y-1 divide-y divide-[#ece7d5]/15">
               {navLinks.map((link) => {
                 const isActive = location.pathname === link.path;
                 return (
                   <button
                     key={link.name}
-                    onClick={() => handleNavClick(link.path)}
+                    type="button"
+                    onClick={() => handleNavClick(link.path, link.isGalleryOption)}
                     className={`py-3.5 text-left text-base font-serif flex items-center justify-between cursor-pointer ${
-                      isActive ? 'text-[#C5A059] font-bold' : 'text-[#1C1917]'
+                      isActive ? 'text-[#a33533] font-bold' : 'text-[#ece7d5]'
                     }`}
                   >
                     <span>{link.name}</span>
-                    <ChevronRight className="w-4 h-4 text-stone-400" />
+                    <ChevronRight className="w-4 h-4 text-[#ece7d5]/50" />
                   </button>
                 );
               })}
@@ -104,7 +149,7 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
 
             <div className="pt-2 space-y-3">
               <AtelierButton
-                variant="whatsapp"
+                variant="primary"
                 className="w-full justify-center text-sm py-3"
                 icon={<MessageCircle className="w-4 h-4" />}
                 onClick={() => {
@@ -114,45 +159,6 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
               >
                 Chat Direct on WhatsApp
               </AtelierButton>
-
-              <AtelierButton
-                variant="primary"
-                className="w-full justify-center text-sm py-3"
-                onClick={() => {
-                  setIsDrawerOpen(false);
-                  if (location.pathname !== '/') {
-                    navigate('/');
-                    setTimeout(() => {
-                      document.getElementById('lead-capture-form')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 200);
-                  } else {
-                    document.getElementById('lead-capture-form')?.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
-              >
-                Enroll in Cohort 17
-              </AtelierButton>
-            </div>
-
-            <div className="flex items-center justify-center gap-6 pt-3 border-t border-[#F0ECE1] text-xs text-[#78716C]">
-              <a
-                href={STUDIO_INSTAGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 hover:text-[#1C1917]"
-              >
-                <Instagram className="w-4 h-4 text-[#C5A059]" />
-                <span>Instagram</span>
-              </a>
-              <a
-                href={STUDIO_YOUTUBE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 hover:text-[#1C1917]"
-              >
-                <Youtube className="w-4 h-4 text-red-600" />
-                <span>YouTube</span>
-              </a>
             </div>
           </div>
         </div>
@@ -162,128 +168,62 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
       <main className="flex-1">
         {isHome ? (
           <div>
-            {/* 1. MOBILE HERO BANNER SECTION */}
-            <section className="relative px-5 pt-8 pb-12 border-b border-[#F0ECE1]">
-              <div className="space-y-5">
-                <div className="inline-flex items-center gap-2 bg-[#FFFFFF] border border-[#C5A059]/40 px-3 py-1 shadow-xs">
-                  <Sparkles className="w-3 h-3 text-[#C5A059]" />
-                  <span className="text-[10px] font-sans tracking-[0.2em] uppercase font-semibold text-[#1C1917]">
-                    Digital Atelier & Academy
-                  </span>
-                </div>
+            {/* SECTION 1: HERO SECTION (Lady Walking Left-to-Right + GPU Brand Reveal) */}
+            <HeroWalkGpuSection
+              isMobile={true}
+              onExploreCards={() => {
+                document
+                  .getElementById('parallax-cards-section')
+                  ?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              onOpenWhatsApp={() => openDirectWhatsApp()}
+            />
 
-                <h1 className="font-serif text-3xl sm:text-4xl font-normal text-[#1C1917] leading-tight tracking-tight">
-                  The Digital Atelier:{' '}
-                  <span className="italic font-normal text-[#C5A059] block mt-1">
-                    Where Fashion Meets Procreate.
-                  </span>
-                </h1>
+            {/* SECTION 2: 4 PARALLAX CARDS & BOOK-OPENING OVERLAYS */}
+            <ParallaxBookCardsSection
+              activeCard={activeBookCard}
+              onSelectCard={(id) => setActiveBookCard(id)}
+            />
 
-                <p className="font-sans text-sm text-[#78716C] leading-relaxed">
-                  Master the art of luxury fashion illustration, bridal rendering, and couture croquis on iPad Pro with genuine tactile authenticity.
-                </p>
-
-                {/* Mobile Touch Visual Frame */}
-                <div className="relative bg-[#FFFFFF] p-2.5 shadow-lg border border-[#C5A059]/40 mt-3">
-                  <div className="relative aspect-[4/5] overflow-hidden bg-stone-900">
-                    <img
-                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80"
-                      alt="Couture Artwork on Procreate"
-                      className="w-full h-full object-cover object-center"
-                    />
-                    <div className="absolute bottom-2 left-2 right-2 bg-[#FAF7F2]/95 backdrop-blur-md p-2 border border-[#C5A059]/40 text-[#1C1917] flex items-center justify-between text-[11px] font-sans">
-                      <div className="flex items-center gap-1.5">
-                        <Brush className="w-3.5 h-3.5 text-[#C5A059]" />
-                        <span className="font-medium">Procreate Canvas</span>
-                      </div>
-                      <span className="text-[9px] font-mono text-[#78716C]">68 Layers</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Mobile CTAs */}
-                <div className="space-y-2.5 pt-2">
-                  <AtelierButton
-                    variant="primary"
-                    size="md"
-                    className="w-full justify-center text-sm py-3.5"
-                    icon={<ArrowRight className="w-4 h-4 text-[#C5A059]" />}
-                    onClick={() => {
-                      document.getElementById('lead-capture-form')?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                  >
-                    Explore Masterclasses
-                  </AtelierButton>
-
-                  <Link to="/gallery" className="block w-full">
-                    <AtelierButton variant="outline" size="md" className="w-full justify-center text-sm py-3">
-                      View Atelier Gallery
-                    </AtelierButton>
-                  </Link>
-                </div>
-
-                {/* Mobile Stats Ribbon */}
-                <div className="grid grid-cols-3 gap-2 pt-4 border-t border-[#F0ECE1] text-center">
-                  <div className="p-2 bg-[#FFFFFF] border border-[#F0ECE1]">
-                    <div className="font-serif text-xl font-semibold text-[#1C1917]">2,500+</div>
-                    <div className="text-[10px] font-sans text-[#78716C] uppercase tracking-wider mt-0.5">
-                      Artists
-                    </div>
-                  </div>
-                  <div className="p-2 bg-[#FFFFFF] border border-[#F0ECE1]">
-                    <div className="font-serif text-xl font-semibold text-[#1C1917]">35+</div>
-                    <div className="text-[10px] font-sans text-[#78716C] uppercase tracking-wider mt-0.5">
-                      Brushes
-                    </div>
-                  </div>
-                  <div className="p-2 bg-[#FFFFFF] border border-[#F0ECE1]">
-                    <div className="font-serif text-xl font-semibold text-[#1C1917]">18</div>
-                    <div className="text-[10px] font-sans text-[#78716C] uppercase tracking-wider mt-0.5">
-                      Countries
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* 2. ARTIST BIO & PORTRAIT */}
-            <SectionWrapper bg="alabaster" className="py-12">
+            {/* SECTION 3: ARTIST BIO & PORTRAIT */}
+            <SectionWrapper bg="obsidian" className="py-12">
               <div className="space-y-6">
-                <div className="inline-flex items-center gap-2 text-[10px] font-sans tracking-[0.2em] uppercase font-semibold text-[#C5A059]">
+                <div className="inline-flex items-center gap-2 text-[10px] font-sans tracking-[0.2em] uppercase font-semibold text-[#a33533]">
                   <Award className="w-3.5 h-3.5" />
                   <span>The Artist Story</span>
                 </div>
 
                 {/* Portrait */}
-                <div className="relative bg-[#FAF7F2] p-3 border border-[#F0ECE1]">
-                  <div className="aspect-[4/5] overflow-hidden bg-stone-200">
+                <div className="relative bg-[#806055] p-3 border border-[#ece7d5]/25">
+                  <div className="aspect-[4/5] overflow-hidden bg-[#30292a]">
                     <img
-                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80"
+                      src={artistPortraitUrl}
                       alt="Vrinda Haldia"
-                      className="w-full h-full object-cover object-top filter grayscale contrast-105"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover object-top"
                     />
                   </div>
                   <div className="mt-2.5 text-center">
-                    <span className="font-serif text-lg font-semibold text-[#1C1917] block">
+                    <span className="font-serif text-lg font-semibold text-[#ece7d5] block">
                       Vrinda Haldia
                     </span>
-                    <span className="text-[11px] font-sans text-[#78716C] uppercase tracking-wider">
+                    <span className="text-[11px] font-sans text-[#ece7d5]/80 uppercase tracking-wider">
                       Founder, Fashion Illustrator & Mentor
                     </span>
                   </div>
 
                   {/* Flowing handwritten script accent */}
-                  <div className="mt-2 text-center bg-[#FFFFFF] border border-[#C5A059]/40 py-2 px-3">
-                    <span className="font-script text-2xl text-[#C5A059]">
+                  <div className="mt-2 text-center bg-[#30292a] border border-[#a33533] py-2 px-3">
+                    <span className="font-script text-2xl text-[#ece7d5]">
                       "Art that breathes authenticity."
                     </span>
                   </div>
                 </div>
 
                 {/* Mobile Narrative */}
-                <div className="space-y-3 text-sm font-sans text-[#78716C] leading-relaxed">
+                <div className="space-y-3 text-sm font-sans text-[#ece7d5]/85 leading-relaxed">
                   <p>
-                    Trained in classical fashion design and Indian textiles, Vrinda Haldia bridged traditional gouache and gold leaf crafts into Procreate with custom hand-calibrated brush algorithms.
+                    Trained in classical fashion design and Indian textiles, Vrinda Haldia bridged traditional oil pastel, gouache, and gold leaf crafts into Procreate with custom hand-calibrated brush algorithms.
                   </p>
                   <p>
                     Through House of Kalakaar, she has personally trained 2,500+ students worldwide, equipping them to render runway croquis, bridal couture, and bespoke fashion lookbooks.
@@ -292,19 +232,19 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
               </div>
             </SectionWrapper>
 
-            {/* 3. INFINITE ARTWORK SHOWCASE CAROUSEL */}
-            <section className="py-12 bg-[#FAF7F2] border-b border-[#F0ECE1]">
+            {/* SECTION 4: INFINITE ARTWORK SHOWCASE CAROUSEL */}
+            <section className="py-12 bg-[#837d75] border-b border-[#ece7d5]/15">
               <div className="px-5 mb-6 flex items-center justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 text-[10px] font-sans tracking-[0.2em] uppercase font-semibold text-[#C5A059]">
-                    <Compass className="w-3 h-3" />
+                  <div className="inline-flex items-center gap-1.5 text-[10px] font-sans tracking-[0.2em] uppercase font-semibold text-[#ece7d5]/80">
+                    <Compass className="w-3 h-3 text-[#a33533]" />
                     <span>The Atelier Gallery</span>
                   </div>
-                  <h2 className="font-serif text-2xl text-[#1C1917] font-semibold mt-0.5">
+                  <h2 className="font-serif text-2xl text-[#ece7d5] font-semibold mt-0.5">
                     Original Masterpieces
                   </h2>
                 </div>
-                <Link to="/gallery" className="text-xs text-[#C5A059] font-sans font-semibold">
+                <Link to="/gallery" className="text-xs text-[#ece7d5] font-sans font-semibold underline">
                   View All →
                 </Link>
               </div>
@@ -312,17 +252,16 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
               <ArtworkCarousel onSelectArtwork={(art) => setSelectedArtwork(art)} isMobile={true} />
             </section>
 
-            {/* 4. STUDENT ART SHOWCASE */}
-            <SectionWrapper bg="cream" className="py-12">
+            {/* SECTION 5: STUDENT ART SHOWCASE */}
+            <SectionWrapper bg="clay" className="py-12">
               <div className="text-center mb-8">
-                <div className="inline-flex items-center gap-1.5 text-[10px] font-sans tracking-[0.2em] uppercase font-semibold text-[#C5A059] mb-1">
-                  <Sparkles className="w-3 h-3" />
-                  <span>Student Spotlight</span>
+                <div className="text-[10px] font-sans tracking-[0.2em] uppercase font-semibold text-[#ece7d5]/80 mb-1">
+                  Student Spotlight
                 </div>
-                <h2 className="font-serif text-2xl text-[#1C1917] font-semibold">
+                <h2 className="font-serif text-2xl text-[#ece7d5] font-semibold">
                   Student Transformations
                 </h2>
-                <p className="text-xs font-sans text-[#78716C] mt-1">
+                <p className="text-xs font-sans text-[#ece7d5]/80 mt-1">
                   Works created during our Procreate workshops
                 </p>
               </div>
@@ -330,14 +269,13 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
               <StudentWorkGrid />
             </SectionWrapper>
 
-            {/* 5. STUDENT & CLIENT TESTIMONIALS */}
-            <SectionWrapper bg="alabaster" className="py-12">
+            {/* SECTION 6: STUDENT & CLIENT TESTIMONIALS */}
+            <SectionWrapper bg="obsidian" className="py-12">
               <div className="text-center mb-8">
-                <div className="inline-flex items-center gap-1.5 text-[10px] font-sans tracking-[0.2em] uppercase font-semibold text-[#C5A059] mb-1">
-                  <Award className="w-3 h-3" />
-                  <span>Student Reviews</span>
+                <div className="text-[10px] font-sans tracking-[0.2em] uppercase font-semibold text-[#a33533] mb-1">
+                  Student Reviews
                 </div>
-                <h2 className="font-serif text-2xl text-[#1C1917] font-semibold">
+                <h2 className="font-serif text-2xl text-[#ece7d5] font-semibold">
                   Loved by Designers & Students
                 </h2>
               </div>
@@ -345,40 +283,8 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
               <TestimonialCards />
             </SectionWrapper>
 
-            {/* INTERACTIVE @skiper-ui/skiper19 SCROLL ANIMATION SHOWCASE */}
-            <section className="relative py-16 bg-[#1C1917] text-[#FAF7F2] overflow-hidden border-y border-[#C5A059]/30 px-5 text-center">
-              <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden opacity-60">
-                <Skiper19
-                  className="w-full h-full max-h-[150%]"
-                  strokeColor="#C5A059"
-                  strokeWidth={14}
-                  pathLengthRange={[0, 1]}
-                />
-              </div>
-
-              <div className="relative z-10 space-y-3">
-                <div className="inline-flex items-center gap-1.5 bg-stone-900 border border-[#C5A059]/50 px-3 py-1 rounded-full text-[10px] uppercase tracking-widest text-[#C5A059] font-medium">
-                  <Sparkles className="w-3 h-3 text-[#C2F84F]" />
-                  <span>@skiper-ui/skiper19</span>
-                </div>
-                <h2 className="font-serif text-2xl text-white font-normal">
-                  The Living Stroke
-                </h2>
-                <p className="text-xs text-stone-300 max-w-xs mx-auto leading-relaxed">
-                  Scroll down to watch the gold atelier vector stroke dynamically draw itself in real-time.
-                </p>
-                <div className="pt-2">
-                  <Link to="/scroll-effect">
-                    <AtelierButton variant="primary" size="sm" className="w-full">
-                      Open 350vh Interactive Demo →
-                    </AtelierButton>
-                  </Link>
-                </div>
-              </div>
-            </section>
-
-            {/* 6. INTERACTIVE CREATIVE LEAD CAPTURE FORM */}
-            <SectionWrapper bg="linen" className="py-12" id="admissions">
+            {/* SECTION 7: INTERACTIVE CREATIVE LEAD CAPTURE FORM */}
+            <SectionWrapper bg="steel" className="py-12" id="admissions">
               <LeadCaptureForm isCompact={true} />
             </SectionWrapper>
           </div>
@@ -388,13 +294,13 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
       </main>
 
       {/* Mobile Footer */}
-      <footer className="bg-[#1C1917] text-[#FAF7F2] pt-12 pb-16 px-5 border-t-2 border-[#C5A059]">
+      <footer className="bg-[#30292a] text-[#ece7d5] pt-12 pb-16 px-5 border-t-2 border-[#a33533]">
         <div className="space-y-6 text-center">
           <div className="flex justify-center">
             <Logo variant="compact" theme="dark" />
           </div>
 
-          <p className="text-xs font-sans text-stone-400 max-w-xs mx-auto leading-relaxed">
+          <p className="text-xs font-sans text-[#ece7d5]/75 max-w-xs mx-auto leading-relaxed">
             High-end digital art studio, fashion illustration brand, and Procreate mentoring academy by Vrinda Haldia.
           </p>
 
@@ -403,7 +309,7 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
               href={STUDIO_INSTAGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-9 h-9 rounded-full border border-stone-700 flex items-center justify-center text-stone-300 hover:text-[#C5A059]"
+              className="w-9 h-9 rounded-full border border-[#ece7d5]/25 flex items-center justify-center text-[#ece7d5] hover:text-[#a33533]"
             >
               <Instagram className="w-4 h-4" />
             </a>
@@ -411,67 +317,57 @@ export const MobileShell: React.FC<MobileShellProps> = ({ children }) => {
               href={STUDIO_YOUTUBE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-9 h-9 rounded-full border border-stone-700 flex items-center justify-center text-stone-300 hover:text-red-400"
+              className="w-9 h-9 rounded-full border border-[#ece7d5]/25 flex items-center justify-center text-[#ece7d5] hover:text-[#a33533]"
             >
               <Youtube className="w-4 h-4" />
             </a>
             <button
+              type="button"
               onClick={() => openDirectWhatsApp()}
-              className="w-9 h-9 rounded-full border border-stone-700 flex items-center justify-center text-stone-300 hover:text-[#128C7E]"
+              className="w-9 h-9 rounded-full border border-[#ece7d5]/25 flex items-center justify-center text-[#ece7d5] hover:text-[#a33533]"
             >
               <MessageCircle className="w-4 h-4" />
             </button>
           </div>
 
-          <div className="text-xs font-sans text-stone-400 space-y-1">
-            <p className="font-semibold text-stone-300">The Jaipur Atelier</p>
-            <p>Civil Lines, C-Scheme, Jaipur, Rajasthan 302006, India</p>
-            <p>curator@houseofkalakaar.com</p>
-          </div>
-
-          <div className="flex items-center justify-center gap-4 text-xs font-sans text-stone-400">
-            <Link to="/terms" className="hover:text-[#C5A059] underline">
-              Terms & Conditions
-            </Link>
-            <span>•</span>
-            <Link to="/privacy" className="hover:text-[#C5A059] underline">
-              DPDP Privacy Notice
-            </Link>
-          </div>
-
-          <div className="text-[11px] font-sans text-stone-500 pt-4 border-t border-stone-800">
-            © {new Date().getFullYear()} House of Kalakaar by Vrinda Haldia. All rights reserved.
+          <div className="text-[11px] font-sans text-[#ece7d5]/60 pt-4 border-t border-[#ece7d5]/15">
+            © {new Date().getFullYear()} House of Kalakaar by Vrinda Haldia.
           </div>
         </div>
       </footer>
 
-      {/* Global DPDP Cookie & Privacy Consent Banner */}
-      <CookieBanner />
-
-      {/* Thumb-Friendly Sticky Mobile Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-t border-[#C5A059]/40 p-2.5 flex items-center gap-2 shadow-2xl">
+      {/* Thumb-Friendly Sticky Mobile Action Bar (Within 15% Mobile Viewport Cap) */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#30292a]/95 backdrop-blur-md border-t border-[#ece7d5]/20 p-2 flex items-center gap-2 shadow-2xl">
         <button
-          onClick={() => openDirectWhatsApp('Hello Vrinda, I would like to inquire about enrolling in House of Kalakaar masterclasses.')}
-          className="flex-1 bg-[#128C7E] text-white py-2.5 px-3 flex items-center justify-center gap-1.5 text-xs font-medium cursor-pointer shadow-xs active:scale-[0.98]"
+          type="button"
+          onClick={() =>
+            openDirectWhatsApp(
+              'Hello Vrinda, I would like to inquire about enrolling in House of Kalakaar masterclasses.'
+            )
+          }
+          className="flex-1 bg-[#a33533] text-[#ece7d5] py-2.5 px-3 flex items-center justify-center gap-1.5 text-xs font-medium cursor-pointer shadow-xs active:scale-[0.98]"
         >
           <MessageCircle className="w-4 h-4" />
           <span>Chat on WhatsApp</span>
         </button>
 
         <button
+          type="button"
           onClick={() => {
             if (location.pathname !== '/') {
               navigate('/');
               setTimeout(() => {
-                document.getElementById('lead-capture-form')?.scrollIntoView({ behavior: 'smooth' });
+                document
+                  .getElementById('lead-capture-form')
+                  ?.scrollIntoView({ behavior: 'smooth' });
               }, 200);
             } else {
               document.getElementById('lead-capture-form')?.scrollIntoView({ behavior: 'smooth' });
             }
           }}
-          className="flex-1 bg-[#1C1917] text-[#FAF7F2] py-2.5 px-3 flex items-center justify-center gap-1.5 text-xs font-medium cursor-pointer shadow-xs active:scale-[0.98]"
+          className="flex-1 bg-[#806055] text-[#ece7d5] py-2.5 px-3 flex items-center justify-center gap-1.5 text-xs font-medium cursor-pointer shadow-xs active:scale-[0.98]"
         >
-          <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
+          <Sparkles className="w-3.5 h-3.5 text-[#ece7d5]" />
           <span>Enroll Now</span>
         </button>
       </div>
