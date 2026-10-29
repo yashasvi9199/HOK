@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { motion } from 'motion/react';
 import { Star } from 'lucide-react';
-import { TESTIMONIALS } from '../data/testimonials';
+import testimonialsData from '../data/testimonials.json';
 import { generateOilPastelArtwork, PastelSubject } from '../utils/proceduralArtGenerator';
 
 const AVATAR_SUBJECTS: PastelSubject[] = [
@@ -14,15 +14,19 @@ const AVATAR_SUBJECTS: PastelSubject[] = [
 export const TestimonialCards: React.FC = () => {
   const avatarUrls = useMemo(() => {
     const map: Record<string, string> = {};
-    TESTIMONIALS.forEach((t, idx) => {
-      map[t.id] = generateOilPastelArtwork(AVATAR_SUBJECTS[idx % AVATAR_SUBJECTS.length], 240, 240);
+    testimonialsData.testimonials.forEach((t, idx) => {
+      map[t.id] = generateOilPastelArtwork(
+        AVATAR_SUBJECTS[idx % AVATAR_SUBJECTS.length],
+        240,
+        240
+      );
     });
     return map;
   }, []);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {TESTIMONIALS.map((t, index) => (
+      {testimonialsData.testimonials.map((t, index) => (
         <motion.div
           key={t.id}
           initial={{ opacity: 0, y: 28 }}
@@ -32,7 +36,7 @@ export const TestimonialCards: React.FC = () => {
           className="bg-[#806055] border border-[#ece7d5]/25 p-6 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between relative group hover:border-[#ece7d5]"
         >
           <div>
-            {/* Stars */}
+            {/* Star Rating */}
             <div className="flex items-center gap-1 mb-4">
               {[...Array(t.rating)].map((_, i) => (
                 <Star key={i} className="w-3.5 h-3.5 fill-[#ece7d5] text-[#ece7d5]" />
@@ -48,7 +52,7 @@ export const TestimonialCards: React.FC = () => {
           {/* Author info */}
           <div className="pt-4 border-t border-[#ece7d5]/20 flex items-center gap-3">
             <img
-              src={avatarUrls[t.id] || t.avatarUrl}
+              src={avatarUrls[t.id]}
               alt={t.name}
               referrerPolicy="no-referrer"
               className="w-10 h-10 rounded-full object-cover border border-[#ece7d5]/40 shrink-0"
