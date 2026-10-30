@@ -38,31 +38,31 @@ export const ParallaxBookCardsSection: React.FC<ParallaxBookCardsSectionProps> =
   const yCard3 = useTransform(scrollYProgress, [0, 1], [45, -45]);
   const yCard4 = useTransform(scrollYProgress, [0, 1], [95, -80]);
 
-  // Generate high-res procedural oil pastel & dripping paint data URLs once
+  // High-res public images organized under /public/images/about us & /public/images/digital media
   const artworks = useMemo(() => {
     return {
       drippingBg: generateDrippingPaintBackground(1200, 800),
       // 6 layered images for Section 2.01 About us
-      bottomLeftRect: generateOilPastelArtwork('illustration_drape', 840, 630),
-      bottomMiddleSquare: generateOilPastelArtwork('composition_abstract', 640, 640),
-      bottomRightSquare: generateOilPastelArtwork('stilllife_vessels', 640, 640),
-      middleLeftSquare: generateOilPastelArtwork('illustration_portrait', 640, 640),
-      middleRightRect: generateOilPastelArtwork('composition_atelier', 840, 630),
-      topCenterSquare: generateOilPastelArtwork('stilllife_botanical', 640, 640),
+      bottomLeftRect: '/images/about us/02-draped-silk-reverie.png',
+      bottomMiddleSquare: '/images/about us/03-cinder-clay-gesture.png',
+      bottomRightSquare: '/images/about us/04-terracotta-vessels.png',
+      middleLeftSquare: '/images/about us/05-chiaroscuro-muse.png',
+      middleRightRect: '/images/about us/06-artist-table.png',
+      topCenterSquare: '/images/about us/07-botanical-heirloom.png',
       // Digital media uniform slides
       digitalMediaMap: {
-        illustration_drape: generateOilPastelArtwork('illustration_drape', 760, 520),
-        digital_velvet_4: generateOilPastelArtwork('digital_velvet_4', 760, 520),
-        digital_couture_2: generateOilPastelArtwork('digital_couture_2', 760, 520),
-        digital_heritage_5: generateOilPastelArtwork('digital_heritage_5', 760, 520),
-        composition_abstract: generateOilPastelArtwork('composition_abstract', 760, 520),
-        stilllife_vessels: generateOilPastelArtwork('stilllife_vessels', 760, 520),
-        illustration_portrait: generateOilPastelArtwork('illustration_portrait', 760, 520),
-        stilllife_botanical: generateOilPastelArtwork('stilllife_botanical', 760, 520),
-        composition_atelier: generateOilPastelArtwork('composition_atelier', 760, 520),
-        digital_couture_1: generateOilPastelArtwork('digital_couture_1', 760, 520),
-        digital_editorial_3: generateOilPastelArtwork('digital_editorial_3', 760, 520),
-        digital_glaze_6: generateOilPastelArtwork('digital_glaze_6', 760, 520),
+        illustration_drape: '/images/digital media/01-couture-drape-study.png',
+        digital_velvet_4: '/images/digital media/02-velvet-silhouette-editorial.png',
+        digital_couture_2: '/images/digital media/03-haute-couture-gold-zardozi.png',
+        digital_heritage_5: '/images/digital media/04-heritage-mughal-tapestry.png',
+        composition_abstract: '/images/digital media/05-abstract-cinder-clay.png',
+        stilllife_vessels: '/images/digital media/06-terracotta-still-life.png',
+        illustration_portrait: '/images/about us/05-chiaroscuro-muse.png',
+        stilllife_botanical: '/images/about us/07-botanical-heirloom.png',
+        composition_atelier: '/images/about us/06-artist-table.png',
+        digital_couture_1: '/images/digital media/01-couture-drape-study.png',
+        digital_editorial_3: '/images/digital media/02-velvet-silhouette-editorial.png',
+        digital_glaze_6: '/images/digital media/03-haute-couture-gold-zardozi.png',
       } as Record<string, string>,
     };
   }, []);
