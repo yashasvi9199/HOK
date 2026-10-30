@@ -29,8 +29,6 @@ export const HeroWalkGpuSection: React.FC<HeroWalkGpuSectionProps> = ({
   isMobile = false,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [revealPercent, setRevealPercent] = useState<number>(0);
-  const [walkCompleted, setWalkCompleted] = useState<boolean>(false);
   const walkStartRef = useRef<number>(performance.now());
   const pointerRef = useRef<{ x: number; y: number; active: boolean }>({
     x: 0.5,
@@ -42,8 +40,6 @@ export const HeroWalkGpuSection: React.FC<HeroWalkGpuSectionProps> = ({
 
   const replayWalk = useCallback(() => {
     walkStartRef.current = performance.now();
-    setWalkCompleted(false);
-    setRevealPercent(0);
   }, []);
 
   useEffect(() => {
@@ -329,12 +325,6 @@ export const HeroWalkGpuSection: React.FC<HeroWalkGpuSectionProps> = ({
           ? 2 * rawProgress * rawProgress
           : 1 - Math.pow(-2 * rawProgress + 2, 2) / 2;
 
-      const currentPct = Math.min(100, Math.round(easedProgress * 100));
-      setRevealPercent(currentPct);
-      if (rawProgress >= 1) {
-        setWalkCompleted(true);
-      }
-
       ctx.clearRect(0, 0, width, height);
 
       // 1. Atmospheric GPU Shader Backdrop Waves
@@ -447,9 +437,6 @@ export const HeroWalkGpuSection: React.FC<HeroWalkGpuSectionProps> = ({
     };
   }, [isMobile]);
 
-  // Clip-path unveils the brand logo, brand name, and hero section behind the walking lady
-  const clipRightInset = Math.max(0, 100 - revealPercent);
-
   return (
     <section
       onMouseMove={(e) => {
@@ -463,7 +450,7 @@ export const HeroWalkGpuSection: React.FC<HeroWalkGpuSectionProps> = ({
       onMouseLeave={() => {
         pointerRef.current.active = false;
       }}
-      className="relative min-h-[88vh] w-full overflow-hidden bg-[#837d75] text-[#ece7d5] flex items-center justify-center border-b border-[#30292a]/30 select-none"
+      className="relative min-h-screen min-h-[100svh] w-full overflow-hidden bg-[#837d75] text-[#ece7d5] flex items-center justify-center py-12 sm:py-16 md:py-20 lg:py-24 border-b border-[#30292a]/30 select-none"
     >
       {/* Background Weathered Steel Atmospheric Mesh */}
       <div
@@ -474,55 +461,50 @@ export const HeroWalkGpuSection: React.FC<HeroWalkGpuSectionProps> = ({
         }}
       />
 
-      {/* Pre-Reveal Subtle Stage Prompt (visible before the lady walks across) */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-20">
-        <span className="font-serif italic text-xl md:text-2xl tracking-[0.3em] text-[#ece7d5]/50 uppercase">
-          The Atelier Runway Unfolds...
-        </span>
-      </div>
-
-      {/* Revealed Brand Section & Logo (Appears progressively behind the walking lady!) */}
-      <div
-        className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 md:px-12 py-16 md:py-24 w-full transition-[clip-path] duration-75 ease-linear"
-        style={{
-          clipPath: `inset(0 ${clipRightInset}% 0 0)`,
-        }}
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+      {/* Main Brand Section & Logo Container */}
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 md:px-12 py-6 sm:py-8 md:py-12 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Left Column: Brand Name & Editorial Narrative */}
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2.5 text-xs font-sans tracking-[0.26em] uppercase text-[#ece7d5]/85">
-              <span>Digital Art Studio</span>
-              <span aria-hidden="true" className="text-[#a33533]">·</span>
-              <span>Fashion Illustration</span>
-              <span aria-hidden="true" className="text-[#a33533]">·</span>
-              <span>Procreate Academy</span>
+          <div className="lg:col-span-7 space-y-5 sm:space-y-6 text-center lg:text-left">
+            {/* Tagline / Subheading */}
+            <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-sans font-semibold tracking-[0.24em] uppercase text-[#a33533] bg-[#30292a]/30 px-3.5 py-1.5 border border-[#a33533]/30 backdrop-blur-xs">
+              <Sparkles className="w-3.5 h-3.5 text-[#a33533]" />
+              <span>Art. Learning. Growth.</span>
             </div>
 
+            {/* Main Brand Title */}
             <h1
-              className="font-serif text-4xl sm:text-6xl xl:text-7xl font-normal text-[#ece7d5] leading-[1.06] tracking-tight"
+              className="font-serif text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-normal text-[#ece7d5] leading-[1.06] tracking-tight"
               style={{ textWrap: 'balance' }}
             >
-              House of Kalakaar{' '}
-              <span className="block italic font-light text-[#a33533] mt-2">
-                by Vrinda Haldia
-              </span>
+              House of Kalakaar
             </h1>
 
-            <p className="font-sans text-base sm:text-lg text-[#ece7d5]/85 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              Where high-fashion runway silhouettes, tactile oil-pastel textures, and digital couture converge. Experience an intimate artistic monograph crafted with authentic stroke physics and timeless Indian heritage.
+            {/* Hook */}
+            <p className="font-serif text-xl sm:text-2xl md:text-3xl text-[#ece7d5] font-medium leading-snug">
+              Learn the art. Build the confidence. Find your way.
             </p>
 
-            {/* Primary Actions */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-3">
+            {/* Editorial Paragraphs */}
+            <div className="space-y-3.5 text-[#ece7d5]/90 font-sans text-sm sm:text-base leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              <p>
+                House of Kalakaar (HOK) is an art education and mentorship initiative founded by Vrinda Haldia. We help aspiring artists learn new skills, strengthen their foundations, experiment with creative ideas and discover their own way of creating.
+              </p>
+              <p className="text-[#ece7d5]/80">
+                Whether you are beginning with your very first sketch or developing your skills for a creative career, your journey can begin here.
+              </p>
+            </div>
+
+            {/* Primary & Secondary Call to Actions */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
               <AtelierButton
                 variant="primary"
                 size="lg"
                 icon={<ArrowRight className="w-4 h-4 text-[#ece7d5]" />}
                 onClick={onExploreCards}
-                className="bg-[#a33533] text-[#ece7d5] border-[#a33533] hover:bg-[#806055] hover:border-[#ece7d5]/40"
+                className="bg-[#a33533] text-[#ece7d5] border-[#a33533] hover:bg-[#806055] hover:border-[#ece7d5]/40 shadow-[0_10px_28px_rgba(163,53,51,0.35)]"
               >
-                Explore Atelier Chapters
+                Explore Learning Paths
               </AtelierButton>
 
               <AtelierButton
@@ -530,52 +512,58 @@ export const HeroWalkGpuSection: React.FC<HeroWalkGpuSectionProps> = ({
                 size="lg"
                 icon={<MessageCircle className="w-4 h-4 text-[#ece7d5]" />}
                 onClick={onOpenWhatsApp}
-                className="border-[#ece7d5]/35 text-[#ece7d5] hover:bg-[#ece7d5] hover:text-[#30292a]"
+                className="border-[#ece7d5]/40 text-[#ece7d5] hover:bg-[#ece7d5] hover:text-[#30292a] transition-all"
               >
-                Direct Studio WhatsApp
+                Meet Your Mentor
               </AtelierButton>
+            </div>
 
-              <button
-                type="button"
-                onClick={replayWalk}
-                className="inline-flex items-center gap-2 px-4 py-3 text-xs font-sans tracking-wider uppercase text-[#ece7d5]/80 hover:text-[#ece7d5] border border-[#ece7d5]/20 hover:border-[#a33533] bg-[#30292a]/60 backdrop-blur-xs transition-all cursor-pointer whitespace-nowrap shrink-0"
-                title="Replay Couture Walk & GPU Reveal"
-              >
-                <RotateCcw className="w-3.5 h-3.5 text-[#a33533]" />
-                <span>Replay Walk</span>
-              </button>
+            {/* Vision Note & Sign-off */}
+            <div className="pt-4 border-t border-[#ece7d5]/15 max-w-xl mx-auto lg:mx-0 space-y-1.5">
+              <p className="font-serif italic text-sm sm:text-base text-[#ece7d5]/85 leading-relaxed">
+                Start with Digital Art & Procreate. Explore more art forms as HOK grows.
+              </p>
+              <p className="font-sans text-xs sm:text-sm tracking-[0.16em] uppercase text-[#a33533] font-semibold">
+                — Vrinda Haldia, Founder & Mentor
+              </p>
             </div>
           </div>
 
-          {/* Right Column: Prominent Uploaded Brand Logo Crest with GPU Halo */}
+          {/* Right Column: Interactive Brand Logo Crest that Replays the Walk */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
             <motion.div
-              initial={{ scale: 0.88, opacity: 0 }}
-              animate={{
-                scale: revealPercent > 45 ? 1 : 0.9,
-                opacity: revealPercent > 35 ? 1 : 0.2,
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              onClick={replayWalk}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  replayWalk();
+                }
               }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="relative p-6 sm:p-8 rounded-full bg-gradient-to-b from-[#ece7d5]/15 via-[#806055]/20 to-[#30292a]/80 border border-[#ece7d5]/25 shadow-[0_24px_80px_rgba(0,0,0,0.65)] backdrop-blur-md group"
+              className="relative p-6 sm:p-8 rounded-full bg-gradient-to-b from-[#ece7d5]/15 via-[#806055]/20 to-[#30292a]/80 border border-[#ece7d5]/25 shadow-[0_24px_80px_rgba(0,0,0,0.65)] backdrop-blur-md group cursor-pointer hover:border-[#a33533] hover:shadow-[0_0_55px_rgba(163,53,51,0.5)] transition-all duration-300"
+              title="Click to replay the runway walk"
+              aria-label="Click brand logo to replay the couture runway walk"
             >
               {/* Rotating ornamental ring */}
-              <div className="absolute inset-2 rounded-full border border-dashed border-[#ece7d5]/30 pointer-events-none" />
+              <div className="absolute inset-2 rounded-full border border-dashed border-[#ece7d5]/30 group-hover:border-[#a33533]/60 pointer-events-none transition-colors duration-500" />
 
               <img
                 src={BRAND_LOGO_URL}
                 alt="House of Kalakaar by Vrinda Haldia Official Brand Logo"
-                className="w-56 h-56 sm:w-72 sm:h-72 lg:w-80 lg:h-80 object-contain drop-shadow-[0_16px_36px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform duration-500"
+                className="w-56 h-56 sm:w-68 sm:h-68 lg:w-76 lg:h-76 object-contain drop-shadow-[0_16px_36px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
-            </motion.div>
 
-            <div className="mt-5 flex items-center gap-3 text-xs font-sans text-[#ece7d5]/75 tracking-widest uppercase">
-              <span>Jaipur</span>
-              <span aria-hidden="true">·</span>
-              <span>New Delhi</span>
-              <span aria-hidden="true">·</span>
-              <span>2,500+ Artists Mentored</span>
-            </div>
+              {/* Interactive Replay Walk Trigger Badge on the Circle */}
+              <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1.5 bg-[#30292a]/95 border border-[#ece7d5]/35 rounded-full text-[11px] font-sans tracking-widest uppercase text-[#ece7d5]/90 group-hover:text-[#ece7d5] group-hover:border-[#a33533] group-hover:bg-[#a33533]/85 flex items-center gap-2 shadow-lg backdrop-blur-md transition-all duration-300 whitespace-nowrap">
+                <RotateCcw className="w-3 h-3 text-[#ece7d5] group-hover:-rotate-180 transition-transform duration-500" />
+                <span>Replay Walk</span>
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -586,13 +574,8 @@ export const HeroWalkGpuSection: React.FC<HeroWalkGpuSectionProps> = ({
         className="absolute inset-0 w-full h-full pointer-events-none z-20"
       />
 
-      {/* Subtle Bottom Runway Progress Line */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#30292a] z-30">
-        <div
-          className="h-full bg-gradient-to-r from-[#806055] via-[#a33533] to-[#ece7d5] transition-all duration-75"
-          style={{ width: `${revealPercent}%` }}
-        />
-      </div>
+      {/* Subtle Bottom Runway Border */}
+      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#a33533]/50 to-transparent z-30" />
     </section>
   );
 };
