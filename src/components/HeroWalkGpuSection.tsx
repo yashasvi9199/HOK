@@ -572,7 +572,7 @@ export const HeroWalkGpuSection: React.FC<HeroWalkGpuSectionProps> = ({
             <div className="mt-5 flex items-center gap-3 text-xs font-sans text-[#ece7d5]/75 tracking-widest uppercase">
               <span>Jaipur</span>
               <span aria-hidden="true">·</span>
-              {/* <span>New Delhi</span> */}
+              <span>New Delhi</span>
               <span aria-hidden="true">·</span>
               <span>2,500+ Artists Mentored</span>
             </div>
