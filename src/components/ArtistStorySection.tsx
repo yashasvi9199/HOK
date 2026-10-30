@@ -7,7 +7,7 @@ import { LiveColorPaletteOverlay } from './LiveColorPaletteOverlay';
 
 export const ArtistStorySection: React.FC = () => {
   const [isPlayingVoiceNote, setIsPlayingVoiceNote] = useState<boolean>(false);
-  const portraitUrl = generateOilPastelArtwork('illustration_portrait', 760, 950);
+  const portraitUrl = storyData.portraitUrl || '/images/about us/01-vrinda-haldia-portrait.png';
 
   return (
     <section
