@@ -1,6 +1,8 @@
 import React from 'react';
 
-export const BRAND_LOGO_URL = '/Logo png.png';
+export const BRAND_LOGO_URL = '/images/logo/01-brand-logo.png';
+export const BRAND_SYMBOL_URL = '/images/logo/02-brand-symbol.png';
+export const BRAND_CREST_URL = '/images/logo/03-brand-crest.png';
 
 interface LogoProps {
   variant?: 'full' | 'monogram' | 'compact' | 'hero';
