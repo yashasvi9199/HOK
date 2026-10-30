@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Layers,
@@ -34,6 +34,10 @@ interface AnatomyLayer {
   techniqueTip: string;
 }
 
+// Exact 3:4 aspect ratio matching the 2048x2732 Procreate master exports
+const COMP_W = 768;
+const COMP_H = 1024;
+
 export const ArtworkLayerDeconstructor: React.FC = () => {
   const layers = anatomyData.layers as AnatomyLayer[];
 
@@ -51,26 +55,203 @@ export const ArtworkLayerDeconstructor: React.FC = () => {
   });
   const [hoveredCircleLayer, setHoveredCircleLayer] = useState<number | null>(null);
   const [copiedHex, setCopiedHex] = useState<string | null>(null);
+  const [imagesReady, setImagesReady] = useState<boolean>(false);
+
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const stagePixelDataRef = useRef<Record<number, Uint8ClampedArray>>({});
 
   const activeLayerData =
     layers.find((l) => l.index === activeStage) || layers[layers.length - 1];
 
-  // Toggle individual layer visibility from the right-hooked vertical circular rail
-  const toggleLayer = (layerIdx: number) => {
-    // If the user clicks a layer higher than current activeStage, expand activeStage to include it
-    if (layerIdx > activeStage) {
-      setActiveStage(layerIdx);
-      setLayerVisibility((prev) => ({
-        ...prev,
-        [layerIdx]: true,
-      }));
-      return;
+  // Load all 8 registered 2048x2732 PNGs once and extract their normalized pixel buffers
+  useEffect(() => {
+    let isCancelled = false;
+
+    const loadAllStageImages = async () => {
+      try {
+        const loadedBuffers: Record<number, Uint8ClampedArray> = {};
+
+        await Promise.all(
+          layers.map(
+            (layer) =>
+              new Promise<void>((resolve) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => {
+                  const off = document.createElement('canvas');
+                  off.width = COMP_W;
+                  off.height = COMP_H;
+                  const ctx = off.getContext('2d');
+                  if (ctx) {
+                    // Fill crisp white paper base first
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, COMP_W, COMP_H);
+                    ctx.drawImage(img, 0, 0, COMP_W, COMP_H);
+                    loadedBuffers[layer.index] = ctx.getImageData(0, 0, COMP_W, COMP_H).data;
+                  }
+                  resolve();
+                };
+                img.onerror = () => resolve();
+                img.src = layer.imageUrl;
+              })
+          )
+        );
+
+        if (!isCancelled && Object.keys(loadedBuffers).length === 8) {
+          stagePixelDataRef.current = loadedBuffers;
+          setImagesReady(true);
+        }
+      } catch {
+        // Fallback handled gracefully
+      }
+    };
+
+    loadAllStageImages();
+    return () => {
+      isCancelled = true;
+    };
+  }, [layers]);
+
+  // Real-time 8-Layer Pixel-Delta Compositor:
+  // Reconstructs the exact visual contribution of each individual layer (01-08)
+  // so disabling ANY random layer number immediately removes that layer from the canvas.
+  useEffect(() => {
+    if (!imagesReady) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const bufs = stagePixelDataRef.current;
+    const b1 = bufs[1];
+    const b2 = bufs[2];
+    const b3 = bufs[3];
+    const b4 = bufs[4];
+    const b5 = bufs[5];
+    const b6 = bufs[6];
+    const b7 = bufs[7];
+    const b8 = bufs[8];
+    if (!b1 || !b2 || !b3 || !b4 || !b5 || !b6 || !b7 || !b8) return;
+
+    const outImg = ctx.createImageData(COMP_W, COMP_H);
+    const out = outImg.data;
+    const len = out.length;
+
+    const vis1 = Boolean(layerVisibility[1]);
+    const vis2 = Boolean(layerVisibility[2]);
+    const vis3 = Boolean(layerVisibility[3]);
+    const vis4 = Boolean(layerVisibility[4]);
+    const vis5 = Boolean(layerVisibility[5]);
+    const vis6 = Boolean(layerVisibility[6]);
+    const vis7 = Boolean(layerVisibility[7]);
+    const vis8 = Boolean(layerVisibility[8]);
+
+    const onlyStage1 =
+      vis1 && !vis2 && !vis3 && !vis4 && !vis5 && !vis6 && !vis7 && !vis8;
+
+    for (let i = 0; i < len; i += 4) {
+      // Check if this pixel is part of the dark garment fill added in Stage 5
+      const garmentDropR = b4[i] - b5[i];
+
+      for (let c = 0; c < 3; c++) {
+        const idx = i + c;
+        const v1 = b1[idx];
+        const v2 = b2[idx];
+        const v3 = b3[idx];
+        const v4 = b4[idx];
+        const v5 = b5[idx];
+        const v6 = b6[idx];
+        const v7 = b7[idx];
+        const v8 = b8[idx];
+
+        // Separate Stage 1 into persistent mannequin croqui (v1tilde) and 10-head ruler guide
+        const v1tilde = v1 > v2 ? v1 : v2;
+        const dCroqui = v1tilde - 255; // <= 0
+        const dRuler = v1 - v1tilde;   // <= 0
+
+        // Telescoping per-stage deltas
+        const d2 = v2 - v1tilde; // Stage 02: Silhouette contour
+        const d3 = v3 - v2;      // Stage 03: Under Painting warm skin base
+        const d4 = v4 - v3;      // Stage 04: Body Rendering (hair, face, fishnet leg)
+        const d5 = v5 - v4;      // Stage 05: Garment Color (espresso gown & lining)
+        const d6 = v6 - v5;      // Stage 06: Fabric Texture
+        const d7 = v7 - v6;      // Stage 07: Chiaroscuro
+        const d8 = v8 - v7;      // Stage 08: Final Glaze
+
+        let val = 255;
+
+        if (vis1) {
+          val += dCroqui + (onlyStage1 ? dRuler : dRuler * 0.65);
+        }
+        if (vis2) {
+          val += d2;
+        }
+        if (vis3) {
+          val += d3;
+        }
+        if (vis4) {
+          // If Under Painting (3) is muted, keep dark rendering strokes & softly tone positive skin highlights
+          if (!vis3 && d4 > 0) {
+            val -= d4 * 0.35;
+          } else {
+            val += d4;
+          }
+        }
+        if (vis5) {
+          val += d5;
+        }
+
+        const dUpper = (vis6 ? d6 : 0) + (vis7 ? d7 : 0) + (vis8 ? d8 : 0);
+
+        if (vis5) {
+          val += dUpper;
+        } else if (dUpper !== 0) {
+          // When Garment Color (Stage 5) is muted, render positive texture/chiaroscuro/glaze
+          // strokes visibly against the white paper silhouette instead of clipping at 255
+          if (garmentDropR > 40 && dUpper > 0) {
+            const tintWeight = c === 0 ? 0.75 : c === 1 ? 0.95 : 1.15;
+            val -= dUpper * tintWeight;
+          } else {
+            val += dUpper;
+          }
+        }
+
+        out[idx] = val < 0 ? 0 : val > 255 ? 255 : val;
+      }
+      out[i + 3] = 255;
     }
 
-    setLayerVisibility((prev) => ({
-      ...prev,
-      [layerIdx]: !prev[layerIdx],
-    }));
+    ctx.putImageData(outImg, 0, 0);
+  }, [imagesReady, layerVisibility]);
+
+  // Scrubbing Master Progression sets cumulative stages 1..stageIdx ON and >stageIdx OFF
+  const handleScrubStage = (stageIdx: number) => {
+    const clamped = Math.max(1, Math.min(8, stageIdx));
+    setActiveStage(clamped);
+    setLayerVisibility({
+      1: clamped >= 1,
+      2: clamped >= 2,
+      3: clamped >= 3,
+      4: clamped >= 4,
+      5: clamped >= 5,
+      6: clamped >= 6,
+      7: clamped >= 7,
+      8: clamped >= 8,
+    });
+  };
+
+  // Clicking any circular button on the right Isolate Rail toggles that exact layer ON/OFF
+  const toggleLayer = (layerIdx: number) => {
+    setLayerVisibility((prev) => {
+      const nextVis = !prev[layerIdx];
+      const updated = {
+        ...prev,
+        [layerIdx]: nextVis,
+      };
+      return updated;
+    });
+    // Also focus inspector on the clicked layer so the user can read its specs
+    setActiveStage(layerIdx);
   };
 
   const handleCopyHex = async (hex: string) => {
@@ -84,11 +265,7 @@ export const ArtworkLayerDeconstructor: React.FC = () => {
     }
   };
 
-  // Active visible stages up to activeStage
-  const visibleStagesUpToActive = layers.filter(
-    (l) => l.index <= activeStage && layerVisibility[l.index]
-  );
-  const visibleCount = visibleStagesUpToActive.length;
+  const visibleCount = Object.values(layerVisibility).filter(Boolean).length;
 
   return (
     <section
@@ -148,21 +325,29 @@ export const ArtworkLayerDeconstructor: React.FC = () => {
                 </span>
               </div>
 
-              {/* Strictly Aligned 2D Registered Canvas Stage (Full Figure Visible Without Cropping) */}
+              {/* Strictly Aligned 2D Registered Canvas Stage (Real-Time Pixel Delta Compositor) */}
               <div className="relative w-full h-[420px] sm:h-[480px] lg:h-[490px] bg-[#ffffff] overflow-hidden border border-[#ece7d5]/25 flex items-center justify-center">
-                {visibleStagesUpToActive.length > 0 ? (
-                  visibleStagesUpToActive.map((stageLayer) => (
-                    <img
-                      key={stageLayer.id}
-                      src={stageLayer.imageUrl}
-                      alt={stageLayer.name}
-                      style={{ opacity: stageLayer.opacity / 100 }}
-                      className="absolute inset-0 w-full h-full object-contain object-center select-none pointer-events-none transition-opacity duration-300"
-                    />
-                  ))
-                ) : (
+                {/* Fallback image while pixel buffers initialize */}
+                {!imagesReady && (
+                  <img
+                    src={activeLayerData.imageUrl}
+                    alt={activeLayerData.name}
+                    className="absolute inset-0 w-full h-full object-contain object-center select-none pointer-events-none"
+                  />
+                )}
+
+                <canvas
+                  ref={canvasRef}
+                  width={COMP_W}
+                  height={COMP_H}
+                  className={`w-full h-full object-contain object-center select-none pointer-events-none transition-opacity duration-200 ${
+                    visibleCount === 0 ? 'opacity-0' : 'opacity-100'
+                  }`}
+                />
+
+                {visibleCount === 0 && (
                   <div className="text-center px-6 text-xs font-mono uppercase tracking-widest text-[#30292a]/50">
-                    All stages muted — toggle any circular stage node on the right rail
+                    All 8 layers muted — click any circular stage button on the right rail to enable
                   </div>
                 )}
 
@@ -180,7 +365,7 @@ export const ArtworkLayerDeconstructor: React.FC = () => {
                 <button
                   type="button"
                   disabled={activeStage <= 1}
-                  onClick={() => setActiveStage((s) => Math.max(1, s - 1))}
+                  onClick={() => handleScrubStage(activeStage - 1)}
                   className="px-3 py-1.5 bg-[#806055]/45 hover:bg-[#a33533] disabled:opacity-30 disabled:pointer-events-none text-[11px] font-sans uppercase tracking-wider text-[#ece7d5] flex items-center gap-1 cursor-pointer transition-colors"
                 >
                   <ChevronLeft className="w-3.5 h-3.5" />
@@ -194,7 +379,7 @@ export const ArtworkLayerDeconstructor: React.FC = () => {
                 <button
                   type="button"
                   disabled={activeStage >= 8}
-                  onClick={() => setActiveStage((s) => Math.min(8, s + 1))}
+                  onClick={() => handleScrubStage(activeStage + 1)}
                   className="px-3 py-1.5 bg-[#806055]/45 hover:bg-[#a33533] disabled:opacity-30 disabled:pointer-events-none text-[11px] font-sans uppercase tracking-wider text-[#ece7d5] flex items-center gap-1 cursor-pointer transition-colors"
                 >
                   <span>Next</span>
@@ -229,7 +414,7 @@ export const ArtworkLayerDeconstructor: React.FC = () => {
                 max={8}
                 step={1}
                 value={activeStage}
-                onChange={(e) => setActiveStage(Number(e.target.value))}
+                onChange={(e) => handleScrubStage(Number(e.target.value))}
                 className="w-full h-1.5 bg-[#837d75]/45 accent-[#a33533] cursor-pointer mb-3.5"
               />
 
@@ -237,16 +422,16 @@ export const ArtworkLayerDeconstructor: React.FC = () => {
               <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
                 {layers.map((l) => {
                   const isCurrent = activeStage === l.index;
-                  const isPassed = l.index < activeStage;
+                  const isLayerOn = Boolean(layerVisibility[l.index]);
                   return (
                     <button
                       key={l.id}
                       type="button"
-                      onClick={() => setActiveStage(l.index)}
+                      onClick={() => handleScrubStage(l.index)}
                       className={`py-1.5 px-1 text-center border transition-all cursor-pointer ${
                         isCurrent
                           ? 'bg-[#a33533] text-[#ece7d5] border-[#ece7d5] shadow-sm'
-                          : isPassed
+                          : isLayerOn
                           ? 'bg-[#806055]/45 text-[#ece7d5]/90 border-[#ece7d5]/25 hover:border-[#ece7d5]'
                           : 'bg-[#30292a] text-[#ece7d5]/45 border-[#ece7d5]/10 hover:border-[#ece7d5]/30'
                       }`}
@@ -401,9 +586,7 @@ export const ArtworkLayerDeconstructor: React.FC = () => {
             {/* 8 Circular Layer Buttons Expanding Vertically */}
             <div className="flex flex-row lg:flex-col items-center justify-between gap-2 sm:gap-2.5 flex-1 py-1 relative z-10 flex-wrap lg:flex-nowrap">
               {layers.map((l) => {
-                const isVisible = layerVisibility[l.index];
-                const isWithinStage = l.index <= activeStage;
-                const isActiveVisually = isVisible && isWithinStage;
+                const isActiveVisually = Boolean(layerVisibility[l.index]);
 
                 return (
                   <div
