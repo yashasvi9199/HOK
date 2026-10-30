@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 import { LeadFormData } from '../types';
 
-export const STUDIO_WHATSAPP_NUMBER = '919876543210'; // House of Kalakaar Studio WhatsApp line
+export const STUDIO_WHATSAPP_NUMBER = '917976499735'; // House of Kalakaar Studio WhatsApp line (+91 79764 99735)
 export const STUDIO_INSTAGRAM_URL = 'https://instagram.com/houseofkalakaar';
 export const STUDIO_YOUTUBE_URL = 'https://youtube.com/@houseofkalakaar';
 
 export function useWhatsAppRedirect() {
   const openDirectWhatsApp = useCallback((customMessage?: string) => {
-    const text = customMessage || 'Hello Vrinda & House of Kalakaar! I would like to inquire about your Procreate masterclasses and digital art studio commissions.';
+    const text = customMessage || 'Hello Vrinda! I would like to learn more about House of Kalakaar art mentorship.';
     const encoded = encodeURIComponent(text);
     const url = `https://wa.me/${STUDIO_WHATSAPP_NUMBER}?text=${encoded}`;
     window.open(url, '_blank', 'noopener,noreferrer');
