@@ -791,15 +791,26 @@ export const ArtworkLayerDeconstructor: React.FC = () => {
 
               {/* Strictly Aligned 2D Canvas Viewport (Zero Tilt / Zero Crookedness) */}
               <div className="relative w-full aspect-[640/840] bg-[#ece7d5] overflow-hidden border border-[#ece7d5]/25 group">
+                {/* High-res rendered image from /public/images/8 stages */}
+                {activeLayerData.imageUrl && (
+                  <img
+                    src={activeLayerData.imageUrl}
+                    alt={activeLayerData.name}
+                    className="absolute inset-0 w-full h-full object-cover select-none"
+                  />
+                )}
                 <canvas
                   ref={masterCanvasRef}
                   width={CANVAS_W}
                   height={CANVAS_H}
-                  className="block w-full h-full object-cover"
+                  className="block w-full h-full object-cover relative z-10"
+                  style={{
+                    opacity: Object.entries(layerVisibility).some(([idx, vis]) => Number(idx) <= activeStage && !vis) ? 1 : 0
+                  }}
                 />
 
                 {/* Corner Registration Crosshairs */}
-                <div className="pointer-events-none absolute inset-2 border border-[#30292a]/15" />
+                <div className="pointer-events-none absolute inset-2 border border-[#30292a]/15 z-20" />
 
                 {/* Live Color Palette Extractor on Hover */}
                 <div className="absolute bottom-3 left-3 right-3 z-20">
