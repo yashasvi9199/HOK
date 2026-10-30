@@ -108,7 +108,7 @@ export const AtelierFooter: React.FC<AtelierFooterProps> = ({
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <span className="inline-flex items-center gap-1.5 text-[#a33533] font-semibold">
               <MapPin className="w-3.5 h-3.5" />
-              {/* <span>Jaipur & New Delhi Atelier</span> */}
+              <span>Jaipur & New Delhi Atelier</span>
             </span>
             <span className="text-[#ece7d5]/35">·</span>
             <span className="inline-flex items-center gap-1.5">
