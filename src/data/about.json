@@ -5,6 +5,7 @@
   "headline": "House of Kalakaar by Vrinda Haldia",
   "subheadline": "Where tactile oil pastel heritage meets contemporary digital couture.",
   "closeHint": "Press ESC, click Cross or Gallery to return",
+  "founderPortrait": "/images/about us/01-vrinda-haldia-portrait.png",
   "paragraphs": [
     "Founded by fashion designer, digital artist, and mentor Vrinda Haldia, House of Kalakaar is an intimate creative sanctuary dedicated to preserving the raw, unpolished soul of hand-drawn artistry within the digital medium.",
     "Every composition born in our studio begins with the philosophy of tangible pigment — the velvety drag of oil pastels across heavy cold-pressed cotton paper, the luminous warmth of drystone clay, and the rich theatrical shadow of obsidian ink.",
@@ -29,27 +30,33 @@
   "artworks": {
     "bottomLeftRect": {
       "title": "Draped Silk Reverie",
-      "category": "Illustration · Oil Pastel"
+      "category": "Illustration · Oil Pastel",
+      "imageUrl": "/images/about us/02-draped-silk-reverie.png"
     },
     "bottomMiddleSquare": {
       "title": "Cinder & Clay Gesture",
-      "category": "Composition · Impasto"
+      "category": "Composition · Impasto",
+      "imageUrl": "/images/about us/03-cinder-clay-gesture.png"
     },
     "bottomRightSquare": {
       "title": "Terracotta Vessels",
-      "category": "Still Life · Pastel"
+      "category": "Still Life · Pastel",
+      "imageUrl": "/images/about us/04-terracotta-vessels.png"
     },
     "middleLeftSquare": {
       "title": "Chiaroscuro Muse",
-      "category": "Illustration · Portrait"
+      "category": "Illustration · Portrait",
+      "imageUrl": "/images/about us/05-chiaroscuro-muse.png"
     },
     "middleRightRect": {
       "title": "The Artist Table",
-      "category": "Composition · Still Life"
+      "category": "Composition · Still Life",
+      "imageUrl": "/images/about us/06-artist-table.png"
     },
     "topCenterSquare": {
       "title": "Botanical Heirloom",
-      "category": "Still Life · Oil Pastel"
+      "category": "Still Life · Oil Pastel",
+      "imageUrl": "/images/about us/07-botanical-heirloom.png"
     }
   }
 }
